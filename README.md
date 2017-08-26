@@ -1,5 +1,5 @@
 # WakeupLightController
-[THIS IS A WORK IN PROGRESS]
+**[THIS IS A WORK IN PROGRESS]**
 
 This is a small board designed to control LEDs (for example LED strip).
 
