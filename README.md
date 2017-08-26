@@ -1,2 +1,3 @@
 # WakeupLightController
-[WIP] Bluetooth Wake-up Light Controller
+[THIS IS A WORK IN PROGRESS]
+
