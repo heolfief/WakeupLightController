@@ -1,7 +1,7 @@
 # WakeupLightController
 **[THIS IS A WORK IN PROGRESS]**
 
-This is a small board designed to control LEDs (for example LED strip).
+This is a small board designed to control LEDs (for example LED strip) as a wake-up light.
 
 ## What it does
 The controller function in two modes :
