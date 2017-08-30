@@ -43,4 +43,4 @@ The **LED intensity** is controlled by a **16bits PWM**. As the ADC is only 10bi
 * **LEDs**, for example an LED strip. The board is thermally capable of delivering up to **4A** of current.
 * A **potentiometer** (1 to 100k linear). You can use a rotary or a linear one.
 * A **momentary button** for bluetooth pairing.  
-* A **switch** if you want to add a way to manualy disable all alarms (even if they are enable by the app).
+* A **switch** if you want to add a way to manualy disable all alarms (even if they are enabled by the app).
