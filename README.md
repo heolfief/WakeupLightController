@@ -11,8 +11,7 @@ The controller function in two modes :
 Wake-up times can be set by the dedicated **bluetooth android app**, and can be set for the week.
 For example you can set the light to wake you up at half past 8 on Monday and at 12 on Sunday.
 
-You can enable or disable alarm for each day with the app, or you can manually disable all alarm with an external switch.
-Time 
+You can enable or disable alarm for each day with the app, or you can manually disable all alarms with an external switch.
 
 When a alarm time approaches, the lamp will start to fade-in linearly and will be at full intensity when alarm time is reached.
 The duration of the fade-in can be set via the app.
