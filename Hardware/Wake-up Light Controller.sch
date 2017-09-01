@@ -25001,7 +25001,7 @@ Switches electronic signals</description>
 </class>
 </classes>
 <parts>
-<part name="IC4" library="SparkFun-IC-Microcontroller" deviceset="ATMEGA328P_TQFP" device="" value="ATMEGA328P_TQFP"/>
+<part name="IC4" library="SparkFun-IC-Microcontroller" deviceset="ATMEGA328P_TQFP" device="" value="ATmega328P"/>
 <part name="GND9" library="supply1" deviceset="GND" device=""/>
 <part name="IC3" library="adafruit" deviceset="DS3231" device="/SO"/>
 <part name="P+8" library="supply1" deviceset="+12V" device=""/>
@@ -25013,15 +25013,15 @@ Switches electronic signals</description>
 <part name="C9" library="rcl" deviceset="C-EU" device="C0805" value="22p"/>
 <part name="C8" library="rcl" deviceset="C-EU" device="C0805" value="22p"/>
 <part name="GND5" library="supply1" deviceset="GND" device=""/>
-<part name="R1" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-EU_" device="M0805" package3d_urn="urn:adsk.eagle:package:26079/1" value="10k"/>
-<part name="R2" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-EU_" device="M0805" package3d_urn="urn:adsk.eagle:package:26079/1" value="10k"/>
+<part name="R1" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-EU_" device="M0805" package3d_urn="urn:adsk.eagle:package:26079/1" value="4.7k"/>
+<part name="R2" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-EU_" device="M0805" package3d_urn="urn:adsk.eagle:package:26079/1" value="4.7k"/>
 <part name="C7" library="rcl" deviceset="C-EU" device="C0805" value="100n"/>
 <part name="C6" library="rcl" deviceset="C-EU" device="C0805" value="100n"/>
 <part name="U1" library="SerialPortBluetooth" deviceset="HC_05" device="" value="HC_05"/>
 <part name="GND6" library="supply1" deviceset="GND" device=""/>
 <part name="GND1" library="supply1" deviceset="GND" device=""/>
 <part name="P+1" library="supply1" deviceset="+12V" device=""/>
-<part name="J1" library="avr-isp" deviceset="AVR-ISP-6PIN" device="AVR-ISP-6PIN-SMALL-SILK" value="AVR-ISP-6PIN"/>
+<part name="J1" library="avr-isp" deviceset="AVR-ISP-6PIN" device="AVR-ISP-6PIN-SMALL-SILK" value="AVR-ISP"/>
 <part name="GND3" library="supply1" deviceset="GND" device=""/>
 <part name="IC2" library="holtek2" deviceset="HT73*" device="" technology="33"/>
 <part name="P+6" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+5V" device=""/>
