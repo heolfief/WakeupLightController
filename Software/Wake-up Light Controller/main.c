@@ -1,7 +1,7 @@
 /*
 * Wake-up Light Controller code
 *
-* Designed to be run on ATmega328P
+* Designed to be run on Atmel ATmega328P MCU
 * 
 * More informations and hardware on :
 * https://github.com/heolfief/WakeupLightController
