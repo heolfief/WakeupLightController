@@ -115,6 +115,8 @@ void IO_init()
 	
 	PCICR |= (1<<PCIE2);								// Enable pin change interrupts
 	PCMSK2 |= (1<<PCINT21);								// Enable pin change interrupt 21 (connected to pairing pin of bluetooth module)
+	EICRA |= (1<<ISC11);								// ...
+	EICRA &= ~(1<<ISC10);								// ... Enable interrupt on falling edge of INT1
 }
 
 void read_eeprom_settings()								// Read previously stored settings
