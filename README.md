@@ -50,12 +50,12 @@ Connection to the board are made by screwing cables to the screw terminals follo
 ![pinout diagram](https://github.com/heolfief/WakeupLightController/blob/master/Hardware/Pictures/board%203D.jpg)
 
 #### List of pins
-* GND: Ground (0V) connection
-* +12V in: Input for the 12V power source
-* +5V out: Output to connect to pin 3 of potentiometer
-* POT: Potentiometer wiper (pin 2) input
-* GND: Ground (0V) connection for pin 1 of potentiometer
-* LED +: LED anode (+) connection
-* LED -: LED cathode (-) connection
-* Alarm sw.: Switch input (switch connect the input to GND when turned on, floating when off) for disabling alarms
-* Pair/stop bt.: Bluetooth pairing and alarm stop button (button connect the input to GND when turned on, floating when off)
+* **GND**: Ground (0V) connection
+* **+12V in**: Input for the 12V power source
+* **+5V out**: Output to connect to pin 3 of potentiometer
+* **POT**: Potentiometer wiper (pin 2) input
+* **GND**: Ground (0V) connection for pin 1 of potentiometer
+* **LED +**: LED anode (+) connection
+* **LED -**: LED cathode (-) connection
+* **Alarm sw.**: Switch input (switch connect the input to GND when turned on, floating when off) for disabling alarms
+* **Pair/stop bt.**: Bluetooth pairing and alarm stop button (button connect the input to GND when turned on, floating when off)
