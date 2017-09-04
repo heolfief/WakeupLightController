@@ -44,3 +44,7 @@ The **LED intensity** is controlled by a **16bits PWM**. As the ADC is only 10bi
 * A **potentiometer** (1 to 100k linear). You can use a rotary or a linear one.
 * A **momentary button** for bluetooth pairing.  
 * A **switch** if you want to add a way to manualy disable all alarms (even if they are enabled by the app).
+
+Connection to the board are made by screwing cables to the screw terminals following this pinout diagram :
+
+![pinout diagram](https://github.com/heolfief/WakeupLightController/blob/master/Hardware/Pictures/board%203D.jpg)
