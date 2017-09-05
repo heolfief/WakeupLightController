@@ -147,26 +147,6 @@ void write_eeprom_settings()							// Store settings
 	eeprom_update_byte(0x16, alrm_duration);			// Write 1 bytes of alrm_duration data to address 22
 }
 
-ISR(INT1_vect)											// When pair / stop button is pressed
-{
-	if (alarm_in_process)								// If alarm is in process
-		alarm_in_process = 0;							// Stop the alarm
-	else												// If no alarm is in process
-		pair_request_flag = 1;							// Go to bluetooth pair state
-}
-
-ISR(PCINT2_vect)										// Interrupt on bluetooth pairing status changed
-{
-	if (bit_is_set(PORTD, PAIR_INFO))					// If bluetooth is paired
-	{
-		is_paired = 1;									// Flag set
-	} 
-	else												// If bluetooth is not paired
-	{
-		is_paired = 0;									// Flag reset
-	}
-}
-
 void PWM_init()
 {
 	TCCR1A |= (1<<COM1A1);								// ...
@@ -211,36 +191,6 @@ void PWM_off()
 	TCCR1A &= ~(1<<COM1A0);								// ... Normal mode, OC1A disconnected
 }
 
-ISR(TIMER1_OVF_vect)									// Interrupt on PWM timer overflow, each 4.096ms (244Hz)
-{
-	tmr1ovf ++;											// Overflow counter
-	if(tmr1ovf == 122)									// Each 0.5sec (122*4.096ms = 0.5s)
-	{
-		tmr1ovf = 0;									// Reset the overflow counter
-		PORTC |= (1<<RTC_PWR);							// Give power to RTC
-		rtc_get_time_24h(&actual_hour, &actual_min, &actual_sec); // Get time from RTC
-		actual_day = rtc_get_day();						// Get day from RTC
-		PORTC &= ~(1<<RTC_PWR);							// Cut power to RTC
-	}
-	if(!alarm_in_process && (actual_hour == alrm_start_hr[actual_day]) && (actual_min == alrm_start_min[actual_day])) // If alarm time is reached and no alarm is in process
-	{
-		alarm_in_process = 1;							// Set the flag
-		OCR1A = 0;										// Start PWM fade with a duty cycle of 0%
-		duty_cycle_increments = (float)alrm_duration*60/65536/0.004096; // Calculate OCR1A increments based on alrm_duration
-	}
-	if (alarm_in_process)								// If alarm is in process
-	{
-		if (stop_alrm)									// If Pair/stop button is pressed
-		{
-			alarm_in_process = 0;						// Stop the alarm
-		}
-		if ((OCR1A + duty_cycle_increments) < 65535)	// Avoid 16bit value overflow
-			OCR1A = OCR1A + duty_cycle_increments;		// Increase duty cycle progressively 
-		else OCR1A = 65535;								// Set duty cycle to 100%
-	}
-	else ADCSRA |= (1<<ADSC);							// Start ADC conversion if no alarm is in process
-}
-
 void ADC_init()
 {
 	ADMUX &= ~((0<<REFS1) | (1<<REFS0));				// VCC used as Voltage Reference
@@ -249,13 +199,6 @@ void ADC_init()
 	ADCSRA |= (1<<ADPS2) | (1<<ADPS1) | (1<<ADPS0);		// ADC clock prescaler /128
 	ADCSRA |= (1<<ADIE) | (1<<ADEN);					// Enable ADC and enable interrupt
 	ADCSRA |= (1<<ADSC);								// Start ADC conversion
-}
-
-ISR(ADC_vect)											// Interrupt on ADC conversion complete
-{
-	slider = ADC;										// Read ADC value
-	OCR1A = pow(2,(float)slider/64)-1;					// Converts linear response to "anti-log" (to compensate for eye brightness perception)
-														// And Set PWM duty cycle to converted ADC value
 }
 
 void UART_init()
@@ -286,39 +229,6 @@ char UART_receive()
 {
 	loop_until_bit_is_set(UCSR0A, RXC0);				// Wait while data is being received
 	return UDR0;										// Return received data
-}
-
-ISR(USART_RX_vect)										// Interrupt on UART reception complete
-{
-	uint8_t rxdata = UDR0;								// Write received data to rxdata
-	if(is_first_byte_received)							// If received byte is the first, as two byte are received by bluetooth each time
-	{
-		id = rxdata >> 3;								// Get only identification variable of received data
-		day = rxdata & 0x07;							// Get only day variable of received data
-		is_first_byte_received = 0;
-	}
-	else
-	{
-		data = rxdata;									// Get data
-		is_first_byte_received = 1;
-	}
-	switch(id)
-	{
-		case ALRM_EN : alrm_EN[day] = (data & 0x01);		// Assign alarm enable data to alrm_EN array
-		break;
-		case ALRM_DUR : alrm_duration = data;				// Assign data to alarm duration variable
-		break;
-		case ALRM_HR : alrm_hr[day] = data;					// Assign data to alarm hour array
-		break;
-		case ALRM_MIN : alrm_min[day] = data;				// Assign data to alarm min array
-		break;
-		case SET_HR : rtc_set_time_24h(data, actual_min, actual_sec); // Set hour
-		break;
-		case SET_MIN : rtc_set_time_24h(actual_hour, data, actual_sec);	// Set minute
-		break;
-	}
-	write_eeprom_settings();							// Write settings to EEPROM
-	
 }
 
 void alarm_start_time_calculation()						// Process the start alarm time based on fading alarm duration
@@ -418,11 +328,101 @@ void update_state_machine()								// State machine
 		break;
 
 		case ALARM :
-		ADCSRA &= ~(1<<ADIE);							// Disable ADC interrupt, therefore stop ADC
-		OCR1A = 0;										// Start with a duty cycle of 0%
-		
+		ADCSRA &= ~(1<<ADIE);							// Disable ADC interrupt, therefore stop ADC		
 		break;
 
 		default : state = INIT;							// In case of a fault, get back to INIT state
 	}
+}
+
+// Interrupt vectors//////////////////////////////////////
+
+ISR(INT1_vect)											// When pair / stop button is pressed
+{
+	if (alarm_in_process)								// If alarm is in process
+		alarm_in_process = 0;							// Stop the alarm
+	else												// If no alarm is in process
+		pair_request_flag = 1;							// Go to bluetooth pair state
+}
+
+ISR(PCINT2_vect)										// Interrupt on bluetooth pairing status changed
+{
+	if (bit_is_set(PORTD, PAIR_INFO))					// If bluetooth is paired
+	{
+		is_paired = 1;									// Flag set
+	} 
+	else												// If bluetooth is not paired
+	{
+		is_paired = 0;									// Flag reset
+	}
+}
+
+ISR(TIMER1_OVF_vect)									// Interrupt on PWM timer overflow, each 4.096ms (244Hz)
+{
+	tmr1ovf ++;											// Overflow counter
+	if(tmr1ovf == 122)									// Each 0.5sec (122*4.096ms = 0.5s)
+	{
+		tmr1ovf = 0;									// Reset the overflow counter
+		PORTC |= (1<<RTC_PWR);							// Give power to RTC
+		rtc_get_time_24h(&actual_hour, &actual_min, &actual_sec); // Get time from RTC
+		actual_day = rtc_get_day();						// Get day from RTC
+		PORTC &= ~(1<<RTC_PWR);							// Cut power to RTC
+	}
+	if(!alarm_in_process && (actual_hour == alrm_start_hr[actual_day]) && (actual_min == alrm_start_min[actual_day])) // If alarm time is reached and no alarm is in process
+	{
+		alarm_in_process = 1;							// Set the flag
+		OCR1A = 0;										// Start PWM fade with a duty cycle of 0%
+		duty_cycle_increments = (float)alrm_duration*60/65536/0.004096; // Calculate OCR1A increments based on alrm_duration
+	}
+	if (alarm_in_process)								// If alarm is in process
+	{
+		if (stop_alrm)									// If Pair/stop button is pressed
+		{
+			alarm_in_process = 0;						// Stop the alarm
+		}
+		if ((OCR1A + duty_cycle_increments) < 65535)	// Avoid 16bit value overflow
+			OCR1A = OCR1A + duty_cycle_increments;		// Increase duty cycle progressively 
+		else OCR1A = 65535;								// Set duty cycle to 100%
+	}
+	else ADCSRA |= (1<<ADSC);							// Start ADC conversion if no alarm is in process
+}
+
+ISR(ADC_vect)											// Interrupt on ADC conversion complete
+{
+	slider = ADC;										// Read ADC value
+	OCR1A = pow(2,(float)slider/64)-1;					// Converts linear response to "anti-log" (to compensate for eye brightness perception)
+														// And Set PWM duty cycle to converted ADC value
+}
+
+ISR(USART_RX_vect)										// Interrupt on UART reception complete
+{
+	uint8_t rxdata = UDR0;								// Write received data to rxdata
+	if(is_first_byte_received)							// If received byte is the first, as two byte are received by bluetooth each time
+	{
+		id = rxdata >> 3;								// Get only identification variable of received data
+		day = rxdata & 0x07;							// Get only day variable of received data
+		is_first_byte_received = 0;
+	}
+	else
+	{
+		data = rxdata;									// Get data
+		is_first_byte_received = 1;
+	}
+	switch(id)
+	{
+		case ALRM_EN : alrm_EN[day] = (data & 0x01);		// Assign alarm enable data to alrm_EN array
+		break;
+		case ALRM_DUR : alrm_duration = data;				// Assign data to alarm duration variable
+		break;
+		case ALRM_HR : alrm_hr[day] = data;					// Assign data to alarm hour array
+		break;
+		case ALRM_MIN : alrm_min[day] = data;				// Assign data to alarm min array
+		break;
+		case SET_HR : rtc_set_time_24h(data, actual_min, actual_sec); // Set hour
+		break;
+		case SET_MIN : rtc_set_time_24h(actual_hour, data, actual_sec);	// Set minute
+		break;
+	}
+	write_eeprom_settings();							// Write settings to EEPROM
+	
 }
