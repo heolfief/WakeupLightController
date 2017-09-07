@@ -62,7 +62,7 @@ void BT_init();
 void update_state_machine();
 
 // Variables declarations/////////////////////////////////
-enum statemachine {INIT, STANDBY, LAMP, ALARM, PAIRING} state = INIT; // Machine states
+enum statemachine {INIT, STANDBY, LAMP, ALARM, BLUETOOTH} state = INIT; // Machine states
 
 uint8_t alrm_EN[7] = {0};								// Alarm enable array
 uint8_t alrm_duration = 0;								// Alarm duration
@@ -307,17 +307,17 @@ void update_state_machine()								// State machine
 		case STANDBY :
 		PWM_off();										// Turn off PWM output
 		if(slider > OFFTHRESHOLD) state = LAMP;			// If slider isn't on 0, turn on the Lamp
-		if(pair_request_flag) state = PAIRING;			// If pair button is pressed, go to pair state
+		if(pair_request_flag) state = BLUETOOTH;		// If pair button is pressed, go to bluetooth state
 		if(alarm_in_process) state = ALARM;				// If an alarm is reached go to alarm state
 		break;
 
 		case LAMP :
 		PWM_on();										// Turn on PWM output
 		if(slider < OFFTHRESHOLD) state = STANDBY;		// If slider is on 0, turn off the Lamp
-		if(pair_request_flag) state = PAIRING;			// If pair button is pressed, got to pair mode
+		if(pair_request_flag) state = BLUETOOTH;		// If pair button is pressed, got to bluetooth state
 		break;
 
-		case PAIRING :
+		case BLUETOOTH :
 		PORTD &= ~(1<<BT_PWR);							// Give power to bluetooth module
 		sei();											// Enable global interrupts
 		UCSR0B |= ((1<<RXCIE0) | (1<<TXCIE0));			// Enable RX and TX interrupts
@@ -424,5 +424,4 @@ ISR(USART_RX_vect)										// Interrupt on UART reception complete
 		break;
 	}
 	write_eeprom_settings();							// Write settings to EEPROM
-	
 }
