@@ -325,6 +325,7 @@ void update_state_machine()								// State machine
 		UCSR0B &= ~((1<<RXCIE0) | (1<<TXCIE0));			// Disable RX and TX interrupts
 		pair_request_flag = 0;							// Pairing complete
 		PORTD |= (1<<BT_PWR);							// Cut power to bluetooth module
+		state = STANDBY;								// Go to standby state
 		break;
 
 		case ALARM :
