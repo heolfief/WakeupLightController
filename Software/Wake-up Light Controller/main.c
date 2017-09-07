@@ -341,7 +341,7 @@ void update_state_machine()								// State machine
 ISR(INT1_vect)											// When pair / stop button is pressed
 {
 	if (alarm_in_process)								// If alarm is in process
-		alarm_in_process = 0;							// Stop the alarm
+		stop_alrm = 1;									// Stop the alarm
 	else												// If no alarm is in process
 		pair_request_flag = 1;							// Go to bluetooth pair state
 }
@@ -380,6 +380,7 @@ ISR(TIMER1_OVF_vect)									// Interrupt on PWM timer overflow, each 4.096ms (2
 		if (stop_alrm)									// If Pair/stop button is pressed
 		{
 			alarm_in_process = 0;						// Stop the alarm
+			state = STANDBY;							// Turn off lamp, go to standby state
 		}
 		if ((OCR1A + duty_cycle_increments) < 65535)	// Avoid 16bit value overflow
 			OCR1A = OCR1A + duty_cycle_increments;		// Increase duty cycle progressively 
