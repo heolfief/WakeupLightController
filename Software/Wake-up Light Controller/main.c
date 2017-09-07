@@ -294,14 +294,14 @@ void update_state_machine()								// State machine
 	switch (state)
 	{
 		case INIT :
-		IO_init();
-		read_eeprom_settings();
-		PWM_init();
-		ADC_init();
-		UART_init();
-		BT_init();
+		IO_init();										// Initialize IOs
+		read_eeprom_settings();							// Gather previously stored settings
+		PWM_init();										// Initialize PWM peripheral
+		ADC_init();										// Initialize ADC peripheral
+		UART_init();									// Initialize UART peripheral
+		BT_init();										// Initialize bluetooth module
 		sei();											// Global interrupts enable
-		state = STANDBY;
+		state = STANDBY;								// After initialization done, got to standby state
 		break;
 
 		case STANDBY :
