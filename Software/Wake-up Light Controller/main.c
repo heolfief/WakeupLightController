@@ -16,7 +16,6 @@
 // Hardware related constants//////////////////////////////
 #define F_CPU		16000000UL							// 16MHz external oscillator
 #define BT_PWR		PD4									// ...
-#define RTC_PWR		PC1									// ...
 #define AT_MODE		PD6									// ...
 #define ALRM_BTN	PD2									// ...
 #define PAIR_BTN	PD3									// ...
@@ -102,12 +101,10 @@ int main(void)
 // Functions//////////////////////////////////////////////
 void IO_init()
 {
-	DDRC |= (1<<RTC_PWR);								// RTC_PWR as output
 	DDRC &= ~(1<<PAIR_INFO);							// PAIR_INFO as input
 	DDRD |= (1<<BT_PWR) | (1<<AT_MODE);					// BT_PWR and AT_MODE as outputs
 	DDRD &= ~((1<<ALRM_BTN) | (1<<PAIR_BTN));			// Alarm and pair buttons as inputs
 	
-	PORTC &= ~(1<<RTC_PWR);								// Low level (RTC off)
 	PORTD |= (1<<BT_PWR);								// High level (BT module off)
 	PORTD &= ~(1<<AT_MODE);								// Low level
 	
@@ -364,10 +361,8 @@ ISR(TIMER1_OVF_vect)									// Interrupt on PWM timer overflow, each 4.096ms (2
 	if(tmr1ovf == 122)									// Each 0.5sec (122*4.096ms = 0.5s)
 	{
 		tmr1ovf = 0;									// Reset the overflow counter
-		PORTC |= (1<<RTC_PWR);							// Give power to RTC
 		rtc_get_time_24h(&actual_hour, &actual_min, &actual_sec); // Get time from RTC
 		actual_day = rtc_get_day();						// Get day from RTC
-		PORTC &= ~(1<<RTC_PWR);							// Cut power to RTC
 	}
 	if(!alarm_in_process && (actual_hour == alrm_start_hr[actual_day]) && (actual_min == alrm_start_min[actual_day])) // If alarm time is reached and no alarm is in process
 	{
