@@ -14,21 +14,23 @@
 */
  
 // Hardware related constants//////////////////////////////
-#define F_CPU		16000000UL							// 16MHz external oscillator
-#define BT_PWR		PD4									// ...
-#define AT_MODE		PD6									// ...
-#define ALRM_BTN	PD2									// ...
-#define PAIR_BTN	PD3									// ...
-#define PAIR_INFO	PC1									// ... Define IO
+#define F_CPU			16000000UL						// 16MHz external oscillator
+#define BT_PWR			PD4								// ...
+#define AT_MODE			PD6								// ...
+#define ALRM_BTN		PD2								// ...
+#define PAIR_BTN		PD3								// ...
+#define PAIR_INFO		PD5								// ...
+#define DEBUG_JUMPER	PD7								// ...
+#define DEBUG_LED		PC1								// ... Define IO
 
 // Software related constants//////////////////////////////
-#define ALRM_EN		1									// ...
-#define ALRM_DUR	2									// ...
-#define ALRM_HR		3									// ...
-#define ALRM_MIN	4									// ...
-#define SET_HR		5									// ...
-#define SET_MIN		6									// ... Define bluetooth data IDs
-#define BAUDRATE	38400								// Baud rate for bluetooth module USART communication
+#define ALRM_EN			1								// ...
+#define ALRM_DUR		2								// ...
+#define ALRM_HR			3								// ...
+#define ALRM_MIN		4								// ...
+#define SET_HR			5								// ...
+#define SET_MIN			6								// ... Define bluetooth data IDs
+#define BAUDRATE		38400							// Baud rate for bluetooth module USART communication
 
 
 // User definable constants///////////////////////////////
@@ -99,16 +101,77 @@ int main(void)
 }
 
 // Functions//////////////////////////////////////////////
+void debug()											// Function used to debug hardware
+{
+	uint8_t i;											// Counter
+	
+	cli();												// Disable global interrupts
+	PORTC &= ~(1<<DEBUG_LED);							// DEBUG_LED on
+	UART_transmit_String("DEBUGGING\n");				// Transmit string
+	UART_transmit_String("Reading EEPROM...\n");		// Transmit string
+	read_eeprom_settings();								// Read previously stored settings
+	UART_transmit_String("Done\nSettings stored :\n");	// Transmit string
+	UART_transmit_String("alrm_EN = ");					// Transmit string
+	for(i=1;i<8,i++)									// For each day of the week
+	{
+		UART_transmit_(alrm_EN[i-1]);					// Transmit string	
+		UART_transmit_String(", ");						// Transmit string
+	}
+	UART_transmit_String("\nalrm_hr = ");				// Transmit string
+	for(i=1;i<8,i++)									// For each day of the week
+	{
+		UART_transmit_(alrm_hr[i-1]);					// Transmit string	
+		UART_transmit_String(", ");						// Transmit string
+	}
+	UART_transmit_String("\nalrm_min = ");				// Transmit string
+	for(i=1;i<8,i++)									// For each day of the week
+	{
+		UART_transmit_(alrm_min[i-1]);					// Transmit string	
+		UART_transmit_String(", ");						// Transmit string
+	}
+	UART_transmit_String("\nalrm_duration = ");			// Transmit string
+	UART_transmit_(alrm_duration);						// Transmit string
+	UART_transmit_String(".\n");						// Transmit string
+	
+	UART_transmit_String("Getting data from RTC...\n");	// Transmit string
+	rtc_get_time_24h(&actual_hour, &actual_min, &actual_sec); // Get time from RTC
+	actual_day = rtc_get_day();							// Get day from RTC
+	UART_transmit_String("Done\nTime : ");				// Transmit string
+	UART_transmit(actual_hour);							// Transmit string
+	UART_transmit_String("hr, ");						// Transmit string
+	UART_transmit(actual_min);							// Transmit string
+	UART_transmit_String("min, ");						// Transmit string
+	UART_transmit(actual_sec);							// Transmit string
+	UART_transmit_String("sec.\nDay of the week : ");	// Transmit string
+	UART_transmit(actual_day);							// Transmit string
+	UART_transmit_String(".\n");						// Transmit string
+	UART_transmit_String("Testing PWM, it should take around 3.3s to fade-in.\n");// Transmit string
+	PWM_on();											// Turn on PWM module
+	OCR1A = 0;											// Reinitialize duty cycle
+	for(i=0;i<65536;i++)								// For all duty cycle values
+	{
+		OCR1A++;										// Increase duty cycle
+		delay_us(50);									// Wait 50µs
+	}
+	UART_transmit_String("Done\n");						// Transmit string
+	PWM_off();											// Turn off PWM module
+	
+	UART_transmit_String("\nDEBUGGING DONE\n");			// Transmit string
+	PORTC |= (1<<DEBUG_LED);							// DEBUG_LED off
+}
+
 void IO_init()
 {
-	DDRC &= ~(1<<PAIR_INFO);							// PAIR_INFO as input
+	DDRC |= (1<<DEBUG_LED);								// DEBUG_LED as output
+	DDRD &= ~(1<<PAIR_INFO);							// PAIR_INFO as input
 	DDRD |= (1<<BT_PWR) | (1<<AT_MODE);					// BT_PWR and AT_MODE as outputs
-	DDRD &= ~((1<<ALRM_BTN) | (1<<PAIR_BTN));			// Alarm and pair buttons as inputs
+	DDRD &= ~((1<<ALRM_BTN) | (1<<PAIR_BTN) | (1<<DEBUG_JUMPER));// Alarm and pair buttons as inputs, debug jumper as input
 	
+	PORTC |= (1<<DEBUG_LED);							// DEBUG_LED off
 	PORTD |= (1<<BT_PWR);								// High level (BT module off)
 	PORTD &= ~(1<<AT_MODE);								// Low level
 	
-	PORTD |= (1<<ALRM_BTN) | (1<<PAIR_BTN);				// Enable (weak) internals pullups
+	PORTD |= (1<<ALRM_BTN) | (1<<PAIR_BTN) | (1<<DEBUG_JUMPER);	// Enable (weak) internals pullups
 	
 	PCICR |= (1<<PCIE2);								// Enable pin change interrupts
 	PCMSK2 |= (1<<PCINT21);								// Enable pin change interrupt 21 (connected to pairing pin of bluetooth module)
@@ -297,6 +360,7 @@ void update_state_machine()								// State machine
 		ADC_init();										// Initialize ADC peripheral
 		UART_init();									// Initialize UART peripheral
 		BT_init();										// Initialize bluetooth module
+		if(bit_is_set(PORTD, DEBUG_JUMPER) debug();		// If jumper is removed, go to debug mode
 		sei();											// Global interrupts enable
 		state = STANDBY;								// After initialization done, got to standby state
 		break;
