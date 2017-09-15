@@ -442,7 +442,8 @@ ISR(TIMER1_OVF_vect)									// Interrupt on PWM timer overflow, each 4.096ms (2
 			state = STANDBY;							// Turn off lamp, go to standby state
 		}
 		if ((OCR1A + duty_cycle_increments) < 65535)	// Avoid 16bit value overflow
-			OCR1A = OCR1A + duty_cycle_increments;		// Increase duty cycle progressively 
+			OCR1A = pow(2,((float)OCR1A + (float)duty_cycle_increments)/4096)-1;		// Converts linear response to "anti-log" (to compensate for eye brightness perception)
+											// And Increase duty cycle progressively by converted value
 		else OCR1A = 65535;								// Set duty cycle to 100%
 	}
 	else ADCSRA |= (1<<ADSC);							// Start ADC conversion if no alarm is in process
@@ -451,7 +452,7 @@ ISR(TIMER1_OVF_vect)									// Interrupt on PWM timer overflow, each 4.096ms (2
 ISR(ADC_vect)											// Interrupt on ADC conversion complete
 {
 	pot_value = ADC;									// Read ADC value
-	OCR1A = pow(2,(float)pot_value/64)-1;					// Converts linear response to "anti-log" (to compensate for eye brightness perception)
+	OCR1A = pow(2,(float)pot_value/64)-1;				// Converts linear response to "anti-log" (to compensate for eye brightness perception)
 														// And Set PWM duty cycle to converted ADC value
 }
 
