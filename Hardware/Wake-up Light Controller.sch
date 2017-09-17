@@ -30569,7 +30569,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <part name="IC3" library="adafruit" library_urn="urn:adsk.eagle:library:420" deviceset="DS3231" device="/SO"/>
 <part name="P+8" library="supply1" deviceset="+12V" device=""/>
 <part name="GND8" library="supply1" deviceset="GND" device=""/>
-<part name="D1" library="diode" library_urn="urn:adsk.eagle:library:210" deviceset="DIODE-" device="DO-214AC" package3d_urn="urn:adsk.eagle:package:43416/2" value="1N4004"/>
+<part name="D2" library="diode" library_urn="urn:adsk.eagle:library:210" deviceset="DIODE-" device="DO-214AC" package3d_urn="urn:adsk.eagle:package:43416/2" value="1N4004"/>
 <part name="R5" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-EU_" device="M0805" package3d_urn="urn:adsk.eagle:package:26079/1" value="10k"/>
 <part name="GND2" library="supply1" deviceset="GND" device=""/>
 <part name="Y1" library="SparkFun-Clocks" library_urn="urn:adsk.eagle:library:511" deviceset="CRYSTAL" device="SMD-3.2X2.5" package3d_urn="urn:adsk.eagle:package:37521/1" value="16MHz"/>
@@ -30640,7 +30640,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <part name="R13" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-EU_" device="M0805" package3d_urn="urn:adsk.eagle:package:26079/1" value="10k"/>
 <part name="P+15" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+5V" device=""/>
 <part name="F1" library="SparkFun-Fuses" library_urn="urn:adsk.eagle:library:517" deviceset="PPTC" device="_PTH" package3d_urn="urn:adsk.eagle:package:38574/1" value="30V/0.5A"/>
-<part name="D2" library="diode" library_urn="urn:adsk.eagle:library:210" deviceset="ZENER-DIODE" device="SOD80C" package3d_urn="urn:adsk.eagle:package:43405/2" value="Zener 15v"/>
+<part name="D1" library="diode" library_urn="urn:adsk.eagle:library:210" deviceset="ZENER-DIODE" device="SOD80C" package3d_urn="urn:adsk.eagle:package:43405/2" value="Zener 15v"/>
 </parts>
 <sheets>
 <sheet>
@@ -30696,7 +30696,7 @@ https://creativecommons.org
 <instance part="IC3" gate="G$1" x="165.1" y="160.02"/>
 <instance part="P+8" gate="1" x="104.14" y="73.66"/>
 <instance part="GND8" gate="1" x="104.14" y="35.56"/>
-<instance part="D1" gate="G$1" x="99.06" y="58.42" smashed="yes" rot="R90">
+<instance part="D2" gate="G$1" x="99.06" y="58.42" smashed="yes" rot="R90">
 <attribute name="NAME" x="98.5774" y="60.96" size="1.778" layer="95" rot="R90"/>
 <attribute name="VALUE" x="102.3874" y="54.102" size="1.778" layer="96" rot="R90"/>
 </instance>
@@ -30790,7 +30790,7 @@ https://creativecommons.org
 </instance>
 <instance part="P+15" gate="1" x="71.12" y="38.1" rot="MR0"/>
 <instance part="F1" gate="G$1" x="0" y="170.18"/>
-<instance part="D2" gate="G$1" x="10.16" y="160.02" rot="R90"/>
+<instance part="D1" gate="G$1" x="10.16" y="160.02" rot="R90"/>
 </instances>
 <busses>
 </busses>
@@ -30923,7 +30923,7 @@ https://creativecommons.org
 <pinref part="PWR_IN" gate="-1" pin="KL"/>
 <wire x1="-7.62" y1="162.56" x2="-7.62" y2="147.32" width="0.1524" layer="91"/>
 <junction x="-7.62" y="147.32"/>
-<pinref part="D2" gate="G$1" pin="A"/>
+<pinref part="D1" gate="G$1" pin="A"/>
 <wire x1="10.16" y1="157.48" x2="10.16" y2="147.32" width="0.1524" layer="91"/>
 <junction x="10.16" y="147.32"/>
 </segment>
@@ -30957,7 +30957,7 @@ https://creativecommons.org
 <segment>
 <wire x1="104.14" y1="58.42" x2="104.14" y2="63.5" width="0.1524" layer="91"/>
 <pinref part="P+8" gate="1" pin="+12V"/>
-<pinref part="D1" gate="G$1" pin="C"/>
+<pinref part="D2" gate="G$1" pin="C"/>
 <wire x1="104.14" y1="63.5" x2="104.14" y2="71.12" width="0.1524" layer="91"/>
 <wire x1="99.06" y1="60.96" x2="99.06" y2="63.5" width="0.1524" layer="91"/>
 <wire x1="99.06" y1="63.5" x2="104.14" y2="63.5" width="0.1524" layer="91"/>
@@ -30977,7 +30977,7 @@ https://creativecommons.org
 <net name="N$1" class="0">
 <segment>
 <wire x1="104.14" y1="50.8" x2="104.14" y2="53.34" width="0.1524" layer="91"/>
-<pinref part="D1" gate="G$1" pin="A"/>
+<pinref part="D2" gate="G$1" pin="A"/>
 <wire x1="104.14" y1="53.34" x2="104.14" y2="55.88" width="0.1524" layer="91"/>
 <wire x1="99.06" y1="55.88" x2="99.06" y2="53.34" width="0.1524" layer="91"/>
 <wire x1="99.06" y1="53.34" x2="104.14" y2="53.34" width="0.1524" layer="91"/>
@@ -31471,7 +31471,7 @@ https://creativecommons.org
 <pinref part="F1" gate="G$1" pin="2"/>
 <wire x1="7.62" y1="170.18" x2="10.16" y2="170.18" width="0.1524" layer="91"/>
 <junction x="17.78" y="170.18"/>
-<pinref part="D2" gate="G$1" pin="C"/>
+<pinref part="D1" gate="G$1" pin="C"/>
 <wire x1="10.16" y1="170.18" x2="17.78" y2="170.18" width="0.1524" layer="91"/>
 <wire x1="10.16" y1="162.56" x2="10.16" y2="170.18" width="0.1524" layer="91"/>
 <junction x="10.16" y="170.18"/>
