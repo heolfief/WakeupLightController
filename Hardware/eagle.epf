@@ -660,14 +660,14 @@ UsedLibrary="C:/Users/Heol/Google Drive/Projets/Eagle libraries/battery.lbr"
 
 [Win_1]
 Type="Control Panel"
-Loc="-9 -38 1190 601"
-State=2
+Loc="0 0 1199 639"
+State=0
 Number=0
 
 [Win_2]
 Type="Schematic Editor"
 Loc="0 0 1919 1050"
-State=1
+State=3
 Number=2
 File="Wake-up Light Controller.sch"
 View="-33.6712 3.51444 237.933 190.588"
@@ -718,7 +718,7 @@ Loc="0 0 1919 1050"
 State=1
 Number=1
 File="Wake-up Light Controller.brd"
-View="-0.885281 -6.35707 67.3102 35.5286"
+View="-27.7888 -6.31171 90.053 66.0667"
 WireWidths=" 0.1016 0.127 0.15 0.2 0.2032 0.3048 0.508 0.6096 1.016 1.27 2.54 0.1524 0.254 1.6256 0.8128 0.4064"
 PadDiameters=" 0.254 0.3048 0.4064 0.6096 0.8128 1.016 1.27 1.4224 1.6764 1.9304 2.1844 2.54 3.81 6.4516 0 1.778"
 PadDrills=" 0.2 0.25 0.3 0.35 0.4 0.45 0.5 0.55 0.65 0.7 0.75 0.8 0.85 0.9 1 0.6"

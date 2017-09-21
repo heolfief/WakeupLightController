@@ -12204,95 +12204,6 @@ http://www.holtek.com&lt;br&gt;
 </deviceset>
 </devicesets>
 </library>
-<library name="inductor-sumida">
-<description>&lt;b&gt;Sumida Power Inductors&lt;/b&gt;&lt;p&gt;
-&lt;p&gt;THIS LIBRARY IS PROVIDED AS IS AND WITHOUT WARRANTY OF ANY KIND, EXPRESSED OR IMPLIED.&lt;br&gt;
-USE AT YOUR OWN RISK!&lt;p&gt;
-&lt;author&gt;Copyright (C) 2008, Bob Starr&lt;br&gt; http://www.bobstarr.net&lt;br&gt;&lt;/author&gt;</description>
-<packages>
-<package name="CDRH127/LD">
-<description>POWER INDUCTOR</description>
-<wire x1="-6.5" y1="4" x2="-4" y2="6.5" width="0.2032" layer="21" curve="-90"/>
-<wire x1="-4" y1="6.5" x2="4" y2="6.5" width="0.2032" layer="21"/>
-<wire x1="4" y1="6.5" x2="6.5" y2="4" width="0.2032" layer="21" curve="-90"/>
-<wire x1="6.5" y1="4" x2="6.5" y2="3" width="0.2032" layer="21"/>
-<wire x1="6.5" y1="3" x2="6.5" y2="-3" width="0.2032" layer="51"/>
-<wire x1="6.5" y1="-3" x2="6.5" y2="-4" width="0.2032" layer="21"/>
-<wire x1="6.5" y1="-4" x2="4" y2="-6.5" width="0.2032" layer="21" curve="-90"/>
-<wire x1="4" y1="-6.5" x2="-4" y2="-6.5" width="0.2032" layer="21"/>
-<wire x1="-4" y1="-6.5" x2="-6.5" y2="-4" width="0.2032" layer="21" curve="-90"/>
-<wire x1="-6.5" y1="-4" x2="-6.5" y2="-3" width="0.2032" layer="21"/>
-<wire x1="-6.5" y1="-3" x2="-6.5" y2="3" width="0.2032" layer="51"/>
-<wire x1="-6.5" y1="3" x2="-6.5" y2="4" width="0.2032" layer="21"/>
-<wire x1="-3.5" y1="5" x2="-3.6464" y2="5.1464" width="0.0508" layer="51"/>
-<wire x1="-3.6464" y1="5.1464" x2="-4.3536" y2="5.1464" width="0.0508" layer="51" curve="90"/>
-<wire x1="-4.3536" y1="5.1464" x2="-5.1464" y2="4.3536" width="0.0508" layer="51"/>
-<wire x1="-5.1464" y1="4.3536" x2="-5.1464" y2="3.6464" width="0.0508" layer="51" curve="90"/>
-<wire x1="-5.1464" y1="3.6464" x2="-5" y2="3.5" width="0.0508" layer="51"/>
-<wire x1="-5" y1="-3.5" x2="-5.1464" y2="-3.6464" width="0.0508" layer="51"/>
-<wire x1="-5.1464" y1="-3.6464" x2="-5.1464" y2="-4.3536" width="0.0508" layer="51" curve="90"/>
-<wire x1="-5.1464" y1="-4.3536" x2="-4.3536" y2="-5.1464" width="0.0508" layer="51"/>
-<wire x1="-4.3536" y1="-5.1464" x2="-3.6464" y2="-5.1464" width="0.0508" layer="51" curve="90"/>
-<wire x1="-3.6464" y1="-5.1464" x2="-3.5" y2="-5" width="0.0508" layer="51"/>
-<wire x1="5" y1="3.5" x2="5.1464" y2="3.6464" width="0.0508" layer="51"/>
-<wire x1="5.1464" y1="3.6464" x2="5.1464" y2="4.3536" width="0.0508" layer="51" curve="90"/>
-<wire x1="5.1464" y1="4.3536" x2="4.3536" y2="5.1464" width="0.0508" layer="51"/>
-<wire x1="4.3536" y1="5.1464" x2="3.6464" y2="5.1464" width="0.0508" layer="51" curve="90"/>
-<wire x1="3.6464" y1="5.1464" x2="3.5" y2="5" width="0.0508" layer="51"/>
-<wire x1="3.5" y1="-5" x2="3.6464" y2="-5.1464" width="0.0508" layer="51"/>
-<wire x1="3.6464" y1="-5.1464" x2="4.3536" y2="-5.1464" width="0.0508" layer="51" curve="90"/>
-<wire x1="4.3536" y1="-5.1464" x2="5.1464" y2="-4.3536" width="0.0508" layer="51"/>
-<wire x1="5.1464" y1="-4.3536" x2="5.1464" y2="-3.6464" width="0.0508" layer="51" curve="90"/>
-<wire x1="5.1464" y1="-3.6464" x2="5" y2="-3.5" width="0.0508" layer="51"/>
-<wire x1="-5" y1="-3.5" x2="-5" y2="3.5" width="0.0508" layer="51" curve="-69.98404"/>
-<wire x1="3.5" y1="-5" x2="-3.5" y2="-5" width="0.0508" layer="51" curve="-69.98404"/>
-<wire x1="5" y1="3.5" x2="5" y2="-3.5" width="0.0508" layer="51" curve="-69.98404"/>
-<wire x1="-3.5" y1="5" x2="3.5" y2="5" width="0.0508" layer="51" curve="-69.98404"/>
-<circle x="0" y="0" radius="5.6568" width="0.2032" layer="51"/>
-<smd name="1" x="-5.5" y="0" dx="5.5" dy="4" layer="1" rot="R90"/>
-<smd name="2" x="5.5" y="0" dx="5.5" dy="4" layer="1" rot="R90"/>
-<text x="-5.08" y="6.985" size="1.016" layer="25" ratio="18">&gt;NAME</text>
-<text x="-5.08" y="-7.62" size="0.8128" layer="27" ratio="10">&gt;VALUE</text>
-</package>
-</packages>
-<symbols>
-<symbol name="L">
-<wire x1="-3.81" y1="0.635" x2="-1.905" y2="0.635" width="0.254" layer="94" curve="-180"/>
-<wire x1="-1.905" y1="0.635" x2="0" y2="0.635" width="0.254" layer="94" curve="-180"/>
-<wire x1="0" y1="0.635" x2="1.905" y2="0.635" width="0.254" layer="94" curve="-180"/>
-<wire x1="1.905" y1="0.635" x2="3.81" y2="0.635" width="0.254" layer="94" curve="-180"/>
-<wire x1="-3.81" y1="0.635" x2="-3.81" y2="0" width="0.254" layer="94"/>
-<wire x1="3.81" y1="0.635" x2="3.81" y2="0" width="0.254" layer="94"/>
-<wire x1="-3.81" y1="0" x2="-5.08" y2="0" width="0.1524" layer="94"/>
-<wire x1="3.81" y1="0" x2="5.08" y2="0" width="0.1524" layer="94"/>
-<wire x1="-3.4925" y1="2.2225" x2="3.4925" y2="2.2225" width="0.254" layer="94"/>
-<wire x1="-3.4925" y1="2.8575" x2="3.4925" y2="2.8575" width="0.254" layer="94"/>
-<text x="-3.81" y="3.81" size="1.778" layer="95">&gt;NAME</text>
-<text x="-3.81" y="-2.54" size="1.778" layer="96">&gt;VALUE</text>
-<pin name="2" x="5.08" y="0" visible="off" length="point" direction="pas" swaplevel="1" rot="R180"/>
-<pin name="1" x="-5.08" y="0" visible="off" length="point" direction="pas" swaplevel="1"/>
-</symbol>
-</symbols>
-<devicesets>
-<deviceset name="CDRH127/LD" prefix="L">
-<description>Power Inductor</description>
-<gates>
-<gate name="G$1" symbol="L" x="0" y="0"/>
-</gates>
-<devices>
-<device name="" package="CDRH127/LD">
-<connects>
-<connect gate="G$1" pin="1" pad="1"/>
-<connect gate="G$1" pin="2" pad="2"/>
-</connects>
-<technologies>
-<technology name=""/>
-</technologies>
-</device>
-</devices>
-</deviceset>
-</devicesets>
-</library>
 <library name="rcl" urn="urn:adsk.eagle:library:334">
 <description>&lt;b&gt;Resistors, Capacitors, Inductors&lt;/b&gt;&lt;p&gt;
 Based on the previous libraries:
@@ -29289,6 +29200,76 @@ You are welcome to use this library for commercial purposes. For attribution, we
 </deviceset>
 </devicesets>
 </library>
+<library name="inductor-wurth">
+<description>&lt;b&gt;Wurth&lt;/b&gt; - Inductors and Filters&lt;p&gt;
+&lt;p&gt;THIS LIBRARY IS PROVIDED AS IS AND WITHOUT WARRANTY OF ANY KIND, EXPRESSED OR IMPLIED.&lt;br&gt;
+USE AT YOUR OWN RISK!&lt;p&gt;
+&lt;author&gt;Copyright (C) 2010, Bob Starr&lt;br&gt; http://www.bobstarr.net&lt;br&gt;&lt;/author&gt;</description>
+<packages>
+<package name="74437346068">
+<description>POWER INDUCTOR</description>
+<wire x1="2.3" y1="-3.3" x2="-2.3" y2="-3.3" width="0.0508" layer="51"/>
+<wire x1="-2.3" y1="-3.3" x2="-3.3" y2="-2.3" width="0.0508" layer="51" curve="-90"/>
+<wire x1="-3.3" y1="-2.3" x2="-3.3" y2="2.3" width="0.0508" layer="51"/>
+<wire x1="-3.3" y1="2.3" x2="-2.3" y2="3.3" width="0.0508" layer="51" curve="-90"/>
+<wire x1="-2.3" y1="3.3" x2="2.3" y2="3.3" width="0.0508" layer="51"/>
+<wire x1="2.3" y1="3.3" x2="3.3" y2="2.3" width="0.0508" layer="51" curve="-90"/>
+<wire x1="3.3" y1="2.3" x2="3.3" y2="-2.3" width="0.0508" layer="51"/>
+<wire x1="3.3" y1="-2.3" x2="2.3" y2="-3.3" width="0.0508" layer="51" curve="-90"/>
+<smd name="1" x="-2.75" y="0" dx="3" dy="1.8" layer="1" rot="R90"/>
+<smd name="2" x="2.75" y="0" dx="3" dy="1.8" layer="1" rot="R90"/>
+<wire x1="-3.5" y1="1.8" x2="-3.5" y2="2.3" width="0.2032" layer="21"/>
+<wire x1="-3.5" y1="2.3" x2="-2.3" y2="3.5" width="0.2032" layer="21" curve="-90"/>
+<wire x1="-2.3" y1="3.5" x2="2.3" y2="3.5" width="0.2032" layer="21"/>
+<wire x1="2.3" y1="3.5" x2="3.5" y2="2.3" width="0.2032" layer="21" curve="-90"/>
+<wire x1="3.5" y1="2.3" x2="3.5" y2="1.8" width="0.2032" layer="21"/>
+<wire x1="3.5" y1="-1.8" x2="3.5" y2="-2.3" width="0.2032" layer="21"/>
+<wire x1="3.5" y1="-2.3" x2="2.3" y2="-3.5" width="0.2032" layer="21" curve="-90"/>
+<wire x1="2.3" y1="-3.5" x2="-2.3" y2="-3.5" width="0.2032" layer="21"/>
+<wire x1="-2.3" y1="-3.5" x2="-3.5" y2="-2.3" width="0.2032" layer="21" curve="-90"/>
+<wire x1="-3.5" y1="-2.3" x2="-3.5" y2="-1.8" width="0.2032" layer="21"/>
+<text x="-2.54" y="3.81" size="1.016" layer="25" ratio="18">&gt;NAME</text>
+<text x="-2.54" y="-4.699" size="0.8128" layer="27" ratio="10">&gt;VALUE</text>
+</package>
+</packages>
+<symbols>
+<symbol name="LI">
+<wire x1="-3.81" y1="0.635" x2="-1.905" y2="0.635" width="0.254" layer="94" curve="-180"/>
+<wire x1="-1.905" y1="0.635" x2="0" y2="0.635" width="0.254" layer="94" curve="-180"/>
+<wire x1="0" y1="0.635" x2="1.905" y2="0.635" width="0.254" layer="94" curve="-180"/>
+<wire x1="1.905" y1="0.635" x2="3.81" y2="0.635" width="0.254" layer="94" curve="-180"/>
+<wire x1="-3.81" y1="0.635" x2="-3.81" y2="0" width="0.254" layer="94"/>
+<wire x1="3.81" y1="0.635" x2="3.81" y2="0" width="0.254" layer="94"/>
+<wire x1="-3.81" y1="0" x2="-5.08" y2="0" width="0.1524" layer="94"/>
+<wire x1="3.81" y1="0" x2="5.08" y2="0" width="0.1524" layer="94"/>
+<wire x1="-3.4925" y1="2.2225" x2="3.4925" y2="2.2225" width="0.254" layer="94"/>
+<wire x1="-3.4925" y1="2.8575" x2="3.4925" y2="2.8575" width="0.254" layer="94"/>
+<text x="-3.81" y="3.81" size="1.778" layer="95">&gt;NAME</text>
+<text x="-3.81" y="-2.54" size="1.778" layer="96">&gt;VALUE</text>
+<pin name="2" x="5.08" y="0" visible="off" length="point" direction="pas" swaplevel="1" rot="R180"/>
+<pin name="1" x="-5.08" y="0" visible="off" length="point" direction="pas" swaplevel="1"/>
+</symbol>
+</symbols>
+<devicesets>
+<deviceset name="74437346068" prefix="L">
+<description>POWER INDUCTOR</description>
+<gates>
+<gate name="G$1" symbol="LI" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="74437346068">
+<connects>
+<connect gate="G$1" pin="1" pad="1"/>
+<connect gate="G$1" pin="2" pad="2"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+</devicesets>
+</library>
 </libraries>
 <attributes>
 </attributes>
@@ -29326,7 +29307,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <part name="P+5" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+5V" device=""/>
 <part name="R4" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-EU_" device="M0805" package3d_urn="urn:adsk.eagle:package:26079/1" value="18k"/>
 <part name="R3" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-EU_" device="M0805" package3d_urn="urn:adsk.eagle:package:26079/1" value="100k"/>
-<part name="L1" library="inductor-sumida" deviceset="CDRH127/LD" device="" value="3.3u"/>
+<part name="L1" library="inductor-wurth" deviceset="74437346068" device="" value="3.3u"/>
 <part name="P+2" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+5V" device=""/>
 <part name="C1" library="rcl" deviceset="C-EU" device="C0805" value="4.7u"/>
 <part name="C2" library="rcl" deviceset="C-EU" device="C0805" value="100n"/>
@@ -29339,7 +29320,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <part name="GND4" library="supply1" deviceset="GND" device=""/>
 <part name="P+7" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+5V" device=""/>
 <part name="FRAME1" library="frames" library_urn="urn:adsk.eagle:library:229" deviceset="A4L-LOC" device=""/>
-<part name="LOGO1" library="SparkFun-Aesthetics" library_urn="urn:adsk.eagle:library:507" deviceset="OSHW-LOGO" device="M-COPPER" package3d_urn="urn:adsk.eagle:package:37119/1"/>
+<part name="LOGO1" library="SparkFun-Aesthetics" library_urn="urn:adsk.eagle:library:507" deviceset="OSHW-LOGO" device="L-COPPER" package3d_urn="urn:adsk.eagle:package:37117/1" value="OSHW-LOGOL-COPPER"/>
 <part name="GND7" library="supply1" deviceset="GND" device=""/>
 <part name="+3V35" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
 <part name="Q3" library="transistor-fet" deviceset="FDN306P" device=""/>
@@ -29521,7 +29502,7 @@ https://creativecommons.org
 <instance part="GND10" gate="1" x="83.82" y="22.86"/>
 <instance part="R13" gate="G$1" x="71.12" y="30.48" smashed="yes" rot="R90">
 <attribute name="NAME" x="74.7014" y="26.67" size="1.778" layer="95" rot="R90"/>
-<attribute name="VALUE" x="71.882" y="29.21" size="1.778" layer="96" rot="R90"/>
+<attribute name="VALUE" x="69.342" y="29.21" size="1.778" layer="96" rot="R90"/>
 </instance>
 <instance part="P+15" gate="1" x="71.12" y="38.1" rot="MR0"/>
 <instance part="F1" gate="G$1" x="0" y="170.18"/>
@@ -29921,12 +29902,11 @@ https://creativecommons.org
 <wire x1="93.98" y1="165.1" x2="93.98" y2="170.18" width="0.1524" layer="91"/>
 <wire x1="93.98" y1="170.18" x2="96.52" y2="170.18" width="0.1524" layer="91"/>
 <pinref part="L1" gate="G$1" pin="2"/>
-<wire x1="83.82" y1="170.18" x2="86.36" y2="170.18" width="0.1524" layer="91"/>
 <junction x="93.98" y="170.18"/>
 <pinref part="R3" gate="G$1" pin="1"/>
-<wire x1="86.36" y1="170.18" x2="93.98" y2="170.18" width="0.1524" layer="91"/>
-<wire x1="86.36" y1="167.64" x2="86.36" y2="170.18" width="0.1524" layer="91"/>
-<junction x="86.36" y="170.18"/>
+<wire x1="83.82" y1="170.18" x2="93.98" y2="170.18" width="0.1524" layer="91"/>
+<wire x1="86.36" y1="167.64" x2="83.82" y2="170.18" width="0.1524" layer="91"/>
+<junction x="83.82" y="170.18"/>
 </segment>
 <segment>
 <pinref part="C10" gate="G$1" pin="1"/>
@@ -29999,8 +29979,8 @@ https://creativecommons.org
 <net name="N$6" class="0">
 <segment>
 <pinref part="L1" gate="G$1" pin="1"/>
-<wire x1="73.66" y1="170.18" x2="71.12" y2="170.18" width="0.1524" layer="91"/>
 <pinref part="IC1" gate="G$1" pin="SW"/>
+<wire x1="71.12" y1="170.18" x2="73.66" y2="170.18" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="+3V3" class="0">
