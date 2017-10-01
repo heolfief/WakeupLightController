@@ -47,7 +47,7 @@ The **LED intensity** is controlled by a **16bits PWM**. As the ADC is only 10bi
 
 Connection to the board are made by screwing cables to the screw terminals following this pinout diagram :
 
-![pinout diagram](http://image.noelshack.com/fichiers/2017/36/4/1504802359-board-3d.jpg)
+![pinout diagram](http://image.noelshack.com/fichiers/2017/39/7/1506870790-board-3d.jpg)
 
 #### List of pins
 * **GND**: Ground (0V) connection
