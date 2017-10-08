@@ -79,7 +79,7 @@ uint8_t actual_min;                                     // Global variable for m
 uint8_t actual_sec;                                     // Global variable for seconds from RTC
 uint8_t actual_day;                                     // Global variable for day from RTC
 
-uint16_t pot_value = 0;								// Potentiommeter value
+uint16_t slider = 0;									// Slider pot value
 
 uint8_t pair_request_flag = 0;							// Flag set when pushing pair button
 uint8_t is_first_byte_received = 1;						// Flag set when first UART byte is received
@@ -367,14 +367,14 @@ void update_state_machine()								// State machine
 
 		case STANDBY :
 		PWM_off();										// Turn off PWM output
-		if(pot_value > OFFTHRESHOLD) state = LAMP;		// If pot_value isn't on 0, turn on the Lamp
+		if(slider > OFFTHRESHOLD) state = LAMP;			// If slider isn't on 0, turn on the Lamp
 		if(pair_request_flag) state = BLUETOOTH;		// If pair button is pressed, go to bluetooth state
 		if(alarm_in_process) state = ALARM;				// If an alarm is reached go to alarm state
 		break;
 
 		case LAMP :
 		PWM_on();										// Turn on PWM output
-		if(pot_value < OFFTHRESHOLD) state = STANDBY;	// If pot_value is on 0, turn off the Lamp
+		if(slider < OFFTHRESHOLD) state = STANDBY;		// If slider is on 0, turn off the Lamp
 		if(pair_request_flag) state = BLUETOOTH;		// If pair button is pressed, got to bluetooth state
 		break;
 
@@ -427,6 +427,7 @@ ISR(TIMER1_OVF_vect)									// Interrupt on PWM timer overflow, each 4.096ms (2
 		tmr1ovf = 0;									// Reset the overflow counter
 		rtc_get_time_24h(&actual_hour, &actual_min, &actual_sec); // Get time from RTC
 		actual_day = rtc_get_day();						// Get day from RTC
+		alarm_start_time_calculation();	
 	}
 	if(!alarm_in_process && (actual_hour == alrm_start_hr[actual_day]) && (actual_min == alrm_start_min[actual_day])) // If alarm time is reached and no alarm is in process
 	{
@@ -442,8 +443,7 @@ ISR(TIMER1_OVF_vect)									// Interrupt on PWM timer overflow, each 4.096ms (2
 			state = STANDBY;							// Turn off lamp, go to standby state
 		}
 		if ((OCR1A + duty_cycle_increments) < 65535)	// Avoid 16bit value overflow
-			OCR1A = pow(2,((float)OCR1A + (float)duty_cycle_increments)/4096)-1;		// Converts linear response to "anti-log" (to compensate for eye brightness perception)
-											// And Increase duty cycle progressively by converted value
+			OCR1A = OCR1A + duty_cycle_increments;		// Increase duty cycle progressively 
 		else OCR1A = 65535;								// Set duty cycle to 100%
 	}
 	else ADCSRA |= (1<<ADSC);							// Start ADC conversion if no alarm is in process
@@ -451,8 +451,8 @@ ISR(TIMER1_OVF_vect)									// Interrupt on PWM timer overflow, each 4.096ms (2
 
 ISR(ADC_vect)											// Interrupt on ADC conversion complete
 {
-	pot_value = ADC;									// Read ADC value
-	OCR1A = pow(2,(float)pot_value/64)-1;				// Converts linear response to "anti-log" (to compensate for eye brightness perception)
+	slider = ADC;										// Read ADC value
+	OCR1A = pow(2,(float)slider/64)-1;					// Converts linear response to "anti-log" (to compensate for eye brightness perception)
 														// And Set PWM duty cycle to converted ADC value
 }
 
