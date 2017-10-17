@@ -29320,7 +29320,7 @@ USE AT YOUR OWN RISK!&lt;p&gt;
 <part name="GND4" library="supply1" deviceset="GND" device=""/>
 <part name="P+7" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+5V" device=""/>
 <part name="FRAME1" library="frames" library_urn="urn:adsk.eagle:library:229" deviceset="A4L-LOC" device=""/>
-<part name="LOGO1" library="SparkFun-Aesthetics" library_urn="urn:adsk.eagle:library:507" deviceset="OSHW-LOGO" device="L-COPPER" package3d_urn="urn:adsk.eagle:package:37117/1" value="OSHW-LOGOL-COPPER"/>
+<part name="LOGO1" library="SparkFun-Aesthetics" library_urn="urn:adsk.eagle:library:507" deviceset="OSHW-LOGO" device="M-COPPER" package3d_urn="urn:adsk.eagle:package:37119/1" value="OSHW-LOGOM-COPPER"/>
 <part name="GND7" library="supply1" deviceset="GND" device=""/>
 <part name="+3V35" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
 <part name="Q3" library="transistor-fet" deviceset="FDN306P" device=""/>
@@ -29388,10 +29388,10 @@ https://creativecommons.org
 <wire x1="-8.89" y1="160.02" x2="-14.224" y2="160.02" width="0.3048" layer="94"/>
 <wire x1="-14.224" y1="160.02" x2="-14.224" y2="167.64" width="0.3048" layer="94"/>
 <wire x1="-14.224" y1="167.64" x2="-8.89" y2="167.64" width="0.3048" layer="94"/>
-<wire x1="92.71" y1="96.52" x2="92.71" y2="86.36" width="0.3048" layer="94"/>
-<wire x1="92.71" y1="86.36" x2="97.79" y2="86.36" width="0.3048" layer="94"/>
-<wire x1="97.79" y1="86.36" x2="97.79" y2="96.52" width="0.3048" layer="94"/>
-<wire x1="97.79" y1="96.52" x2="92.71" y2="96.52" width="0.3048" layer="94"/>
+<wire x1="92.71" y1="91.44" x2="92.71" y2="81.28" width="0.3048" layer="94"/>
+<wire x1="92.71" y1="81.28" x2="97.79" y2="81.28" width="0.3048" layer="94"/>
+<wire x1="97.79" y1="81.28" x2="97.79" y2="91.44" width="0.3048" layer="94"/>
+<wire x1="97.79" y1="91.44" x2="92.71" y2="91.44" width="0.3048" layer="94"/>
 <wire x1="105.41" y1="60.96" x2="110.49" y2="60.96" width="0.3048" layer="94"/>
 <wire x1="110.49" y1="60.96" x2="110.49" y2="53.34" width="0.3048" layer="94"/>
 <wire x1="110.49" y1="53.34" x2="105.41" y2="53.34" width="0.3048" layer="94"/>
@@ -29447,8 +29447,8 @@ https://creativecommons.org
 <instance part="C5" gate="G$1" x="121.92" y="162.56"/>
 <instance part="C10" gate="G$1" x="-2.54" y="45.72"/>
 <instance part="P+9" gate="1" x="-2.54" y="50.8"/>
-<instance part="GND4" gate="1" x="88.9" y="83.82"/>
-<instance part="P+7" gate="1" x="88.9" y="99.06"/>
+<instance part="GND4" gate="1" x="88.9" y="78.74"/>
+<instance part="P+7" gate="1" x="88.9" y="96.52" rot="MR0"/>
 <instance part="FRAME1" gate="G$1" x="-27.94" y="7.62"/>
 <instance part="LOGO1" gate="G$1" x="146.304" y="24.638"/>
 <instance part="GND7" gate="1" x="208.28" y="55.88"/>
@@ -29456,9 +29456,9 @@ https://creativecommons.org
 <instance part="Q3" gate="G$1" x="144.78" y="68.58"/>
 <instance part="PWR_IN" gate="-1" x="-12.7" y="162.56"/>
 <instance part="PWR_IN" gate="-2" x="-12.7" y="165.1"/>
-<instance part="POTENTIOMETER" gate="-1" x="96.52" y="93.98" rot="MR0"/>
-<instance part="POTENTIOMETER" gate="-2" x="96.52" y="91.44" rot="MR0"/>
-<instance part="POTENTIOMETER" gate="-3" x="96.52" y="88.9" rot="MR0"/>
+<instance part="POTENTIOMETER" gate="-1" x="96.52" y="88.9" rot="MR0"/>
+<instance part="POTENTIOMETER" gate="-2" x="96.52" y="86.36" rot="MR0"/>
+<instance part="POTENTIOMETER" gate="-3" x="96.52" y="83.82" rot="MR0"/>
 <instance part="LED_OUT" gate="-1" x="109.22" y="58.42" rot="MR0"/>
 <instance part="LED_OUT" gate="-2" x="109.22" y="55.88" rot="MR0"/>
 <instance part="IC1" gate="G$1" x="53.34" y="162.56"/>
@@ -29485,9 +29485,9 @@ https://creativecommons.org
 <instance part="J3" gate="G$1" x="200.66" y="157.48" rot="R270"/>
 <instance part="P+11" gate="1" x="144.78" y="177.8"/>
 <instance part="R10" gate="G$1" x="66.04" y="88.9" rot="R180"/>
-<instance part="LED1" gate="G$1" x="76.2" y="88.9" rot="R270"/>
-<instance part="P+12" gate="1" x="83.82" y="88.9" rot="MR90"/>
-<instance part="J2" gate="G$1" x="78.74" y="78.74" rot="R270"/>
+<instance part="LED1" gate="G$1" x="76.2" y="88.9" rot="MR90"/>
+<instance part="P+12" gate="1" x="83.82" y="88.9" rot="R270"/>
+<instance part="J2" gate="G$1" x="73.66" y="78.74" rot="R270"/>
 <instance part="R11" gate="G$1" x="81.28" y="58.42" smashed="yes" rot="R90">
 <attribute name="NAME" x="79.7814" y="54.61" size="1.778" layer="95" rot="R90"/>
 <attribute name="VALUE" x="79.502" y="59.69" size="1.778" layer="96" rot="R90"/>
@@ -29654,8 +29654,8 @@ https://creativecommons.org
 </segment>
 <segment>
 <pinref part="GND4" gate="1" pin="GND"/>
-<wire x1="91.44" y1="88.9" x2="88.9" y2="88.9" width="0.1524" layer="91"/>
-<wire x1="88.9" y1="88.9" x2="88.9" y2="86.36" width="0.1524" layer="91"/>
+<wire x1="91.44" y1="83.82" x2="88.9" y2="83.82" width="0.1524" layer="91"/>
+<wire x1="88.9" y1="83.82" x2="88.9" y2="81.28" width="0.1524" layer="91"/>
 <pinref part="POTENTIOMETER" gate="-3" pin="KL"/>
 </segment>
 <segment>
@@ -29831,11 +29831,11 @@ https://creativecommons.org
 <net name="MCU_TX" class="0">
 <segment>
 <pinref part="IC4" gate="U$1" pin="PD1(TXD)"/>
-<wire x1="58.42" y1="66.04" x2="78.74" y2="66.04" width="0.1524" layer="91"/>
+<wire x1="58.42" y1="66.04" x2="73.66" y2="66.04" width="0.1524" layer="91"/>
 <label x="86.36" y="66.04" size="1.27" layer="95"/>
-<wire x1="78.74" y1="66.04" x2="86.36" y2="66.04" width="0.1524" layer="91"/>
-<wire x1="78.74" y1="71.12" x2="78.74" y2="66.04" width="0.1524" layer="91"/>
-<junction x="78.74" y="66.04"/>
+<wire x1="73.66" y1="66.04" x2="86.36" y2="66.04" width="0.1524" layer="91"/>
+<wire x1="73.66" y1="71.12" x2="73.66" y2="66.04" width="0.1524" layer="91"/>
+<junction x="73.66" y="66.04"/>
 <pinref part="J2" gate="G$1" pin="1"/>
 </segment>
 <segment>
@@ -29914,8 +29914,8 @@ https://creativecommons.org
 </segment>
 <segment>
 <pinref part="P+7" gate="1" pin="+5V"/>
-<wire x1="91.44" y1="93.98" x2="88.9" y2="93.98" width="0.1524" layer="91"/>
-<wire x1="88.9" y1="93.98" x2="88.9" y2="96.52" width="0.1524" layer="91"/>
+<wire x1="91.44" y1="88.9" x2="88.9" y2="88.9" width="0.1524" layer="91"/>
+<wire x1="88.9" y1="88.9" x2="88.9" y2="93.98" width="0.1524" layer="91"/>
 <pinref part="POTENTIOMETER" gate="-1" pin="KL"/>
 </segment>
 <segment>
@@ -30062,13 +30062,6 @@ https://creativecommons.org
 <pinref part="Q3" gate="G$1" pin="G"/>
 </segment>
 </net>
-<net name="N$11" class="0">
-<segment>
-<pinref part="IC4" gate="U$1" pin="PC0(ADC0)"/>
-<wire x1="58.42" y1="91.44" x2="91.44" y2="91.44" width="0.1524" layer="91"/>
-<pinref part="POTENTIOMETER" gate="-2" pin="KL"/>
-</segment>
-</net>
 <net name="AT_MODE" class="0">
 <segment>
 <pinref part="U1" gate="G$1" pin="PIO11"/>
@@ -30108,12 +30101,12 @@ https://creativecommons.org
 <net name="MCU_RX" class="0">
 <segment>
 <pinref part="IC4" gate="U$1" pin="PD0(RXD)"/>
-<wire x1="58.42" y1="68.58" x2="81.28" y2="68.58" width="0.1524" layer="91"/>
+<wire x1="58.42" y1="68.58" x2="76.2" y2="68.58" width="0.1524" layer="91"/>
 <label x="86.36" y="68.58" size="1.27" layer="95"/>
-<wire x1="81.28" y1="68.58" x2="86.36" y2="68.58" width="0.1524" layer="91"/>
-<junction x="81.28" y="68.58"/>
+<wire x1="76.2" y1="68.58" x2="86.36" y2="68.58" width="0.1524" layer="91"/>
+<junction x="76.2" y="68.58"/>
 <pinref part="J2" gate="G$1" pin="2"/>
-<wire x1="81.28" y1="68.58" x2="81.28" y2="71.12" width="0.1524" layer="91"/>
+<wire x1="76.2" y1="68.58" x2="76.2" y2="71.12" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="Q1" gate="NMOS" pin="D"/>
@@ -30190,6 +30183,13 @@ https://creativecommons.org
 <wire x1="10.16" y1="170.18" x2="17.78" y2="170.18" width="0.1524" layer="91"/>
 <wire x1="10.16" y1="162.56" x2="10.16" y2="170.18" width="0.1524" layer="91"/>
 <junction x="10.16" y="170.18"/>
+</segment>
+</net>
+<net name="N$11" class="0">
+<segment>
+<pinref part="IC4" gate="U$1" pin="PC2(ADC2)"/>
+<pinref part="POTENTIOMETER" gate="-2" pin="KL"/>
+<wire x1="58.42" y1="86.36" x2="91.44" y2="86.36" width="0.1524" layer="91"/>
 </segment>
 </net>
 </nets>

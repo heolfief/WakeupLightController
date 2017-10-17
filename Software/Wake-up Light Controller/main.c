@@ -255,7 +255,8 @@ void ADC_init()
 {
 	ADMUX &= ~((0<<REFS1) | (1<<REFS0));				// VCC used as Voltage Reference
 	ADMUX &= ~(1<<ADLAR);								// ADC Right Adjust Result
-	ADMUX &= ~((1<<MUX3) | (1<<MUX2) | (1<<MUX1) | (1<<MUX0)); // ... Select ADC0
+	ADMUX |= (1<<MUX1);									// ...
+	ADMUX &= ~((1<<MUX3) | (1<<MUX2)  | (1<<MUX0));		// ... Select ADC1
 	ADCSRA |= (1<<ADPS2) | (1<<ADPS1) | (1<<ADPS0);		// ADC clock prescaler /128
 	ADCSRA |= (1<<ADIE) | (1<<ADEN);					// Enable ADC and enable interrupt
 	ADCSRA |= (1<<ADSC);								// Start ADC conversion
