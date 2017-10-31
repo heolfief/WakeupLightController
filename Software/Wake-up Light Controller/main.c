@@ -93,7 +93,6 @@ uint8_t duty_cycle_increments;							// Increments used for PWM fade-in during t
 // Main programm//////////////////////////////////////////
 int main(void)
 {
-
 	while (1)
 	{
 		update_state_machine();
