@@ -2,17 +2,17 @@
 * Wake-up Light Controller code
 *
 * Designed to be run on Atmel ATmega328P MCU
-* 
+*
 * More informations and hardware on :
 * https://github.com/heolfief/WakeupLightController
-* 
+*
 * Created: 12/08/2017 15:57:40
 * Author : Heol Fief
-* 
+*
 * This hardware and software are released under the Creative Commons Attribution Share-Alike 4.0 License
 * https://creativecommons.org/licenses/by-sa/4.0/
 */
- 
+
 // Hardware related constants//////////////////////////////
 #define F_CPU			16000000UL						// 16MHz external oscillator
 #define BT_PWR			PD4								// ...
@@ -22,7 +22,7 @@
 #define PAIR_INFO		PD5								// ...
 #define DEBUG_JUMPER	PD7								// ...
 #define DEBUG_LED		PC1								// ... Define IO
-
+<x
 // Software related constants//////////////////////////////
 #define ALRM_EN			1								// ...
 #define ALRM_DUR		2								// ...
@@ -93,7 +93,7 @@ uint8_t duty_cycle_increments;							// Increments used for PWM fade-in during t
 // Main programm//////////////////////////////////////////
 int main(void)
 {
-	
+
 	while (1)
 	{
 		update_state_machine();
@@ -104,7 +104,7 @@ int main(void)
 void debug()											// Function used to debug hardware
 {
 	uint8_t i;											// Counter
-	
+
 	cli();												// Disable global interrupts
 	PORTC &= ~(1<<DEBUG_LED);							// DEBUG_LED on
 	UART_transmit_String("DEBUGGING\n");				// Transmit string
@@ -114,25 +114,25 @@ void debug()											// Function used to debug hardware
 	UART_transmit_String("alrm_EN = ");					// Transmit string
 	for(i=1;i<8,i++)									// For each day of the week
 	{
-		UART_transmit_(alrm_EN[i-1]);					// Transmit string	
+		UART_transmit_(alrm_EN[i-1]);					// Transmit string
 		UART_transmit_String(", ");						// Transmit string
 	}
 	UART_transmit_String("\nalrm_hr = ");				// Transmit string
 	for(i=1;i<8,i++)									// For each day of the week
 	{
-		UART_transmit_(alrm_hr[i-1]);					// Transmit string	
+		UART_transmit_(alrm_hr[i-1]);					// Transmit string
 		UART_transmit_String(", ");						// Transmit string
 	}
 	UART_transmit_String("\nalrm_min = ");				// Transmit string
 	for(i=1;i<8,i++)									// For each day of the week
 	{
-		UART_transmit_(alrm_min[i-1]);					// Transmit string	
+		UART_transmit_(alrm_min[i-1]);					// Transmit string
 		UART_transmit_String(", ");						// Transmit string
 	}
 	UART_transmit_String("\nalrm_duration = ");			// Transmit string
 	UART_transmit_(alrm_duration);						// Transmit string
 	UART_transmit_String(".\n");						// Transmit string
-	
+
 	UART_transmit_String("Getting data from RTC...\n");	// Transmit string
 	rtc_get_time_24h(&actual_hour, &actual_min, &actual_sec); // Get time from RTC
 	actual_day = rtc_get_day();							// Get day from RTC
@@ -155,7 +155,7 @@ void debug()											// Function used to debug hardware
 	}
 	UART_transmit_String("Done\n");						// Transmit string
 	PWM_off();											// Turn off PWM module
-	
+
 	UART_transmit_String("\nDEBUGGING DONE\n");			// Transmit string
 	PORTC |= (1<<DEBUG_LED);							// DEBUG_LED off
 }
@@ -166,16 +166,16 @@ void IO_init()
 	DDRD &= ~(1<<PAIR_INFO);							// PAIR_INFO as input
 	DDRD |= (1<<BT_PWR) | (1<<AT_MODE);					// BT_PWR and AT_MODE as outputs
 	DDRD &= ~((1<<ALRM_BTN) | (1<<PAIR_BTN) | (1<<DEBUG_JUMPER));// Alarm and pair buttons as inputs, debug jumper as input
-	
+
 	PORTC |= (1<<DEBUG_LED);							// DEBUG_LED off
 	PORTD |= (1<<BT_PWR);								// High level (BT module off)
 	PORTD &= ~(1<<AT_MODE);								// Low level
-	
+
 	PORTD |= (1<<ALRM_BTN) | (1<<PAIR_BTN) | (1<<DEBUG_JUMPER);	// Enable (weak) internals pullups
-	
+
 	PCICR |= (1<<PCIE2);								// Enable pin change interrupts
 	PCMSK2 |= (1<<PCINT21);								// Enable pin change interrupt 21 (connected to pairing pin of bluetooth module)
-	
+
 	EIMSK |= (1<<INT1);									// Enable external interrupt INT1
 	EICRA |= (1<<ISC11);								// ...
 	EICRA &= ~(1<<ISC10);								// ... Enable interrupt on falling edge of INT1
@@ -211,19 +211,19 @@ void PWM_init()
 {
 	TCCR1A |= (1<<COM1A1);								// ...
 	TCCR1A &= ~(1<<COM1A0);								// ... Non-inverting mode on OC1A
-	
+
 	TCCR1A |=(1<<WGM11);								// ...
 	TCCR1A &= ~(1<<WGM10);								// ...
 	TCCR1B |= (1<<WGM13);								// ...
 	TCCR1B |= (1<<WGM12);								// Fast PWM mode 14, ICR1 as TOP
-	
+
 	TCCR1B |= (1<<CS10);								// ...
 	TCCR1B &= ~((1<<CS12) | (1<<CS11));					// No prescaler
-	
+
 	TIMSK1 |= (1<<TOIE1);								// Enable interrupt on timer 1 overflow
-	
+
 	ICR1 = 0xFFFF;										// TOP set to max value -> 244Hz
-	
+
 	OCR1A = 0;											// Duty cycle to 0% (as default)
 }
 
@@ -231,14 +231,14 @@ void PWM_on()
 {
 	TCCR1A |= (1<<COM1A1);								// ...
 	TCCR1A &= ~(1<<COM1A0);								// ... Non-inverting mode on OC1A
-	
+
 	TCCR1A &= ~(1<<WGM11);								// ...
 	TCCR1A &= ~(1<<WGM10);								// ...
 	TCCR1B &= ~(1<<WGM13);								// ...
 	TCCR1B &= ~(1<<WGM12);								// ... Normal mode, no PWM
-	
+
 	TCCR1C |= (1<<FOC1A);								// Force output compare (to remove PWM spike glitch)
-	
+
 	TCCR1A |=(1<<WGM11);								// ...
 	TCCR1A &= ~(1<<WGM10);								// ...
 	TCCR1B |= (1<<WGM13);								// ...
@@ -270,7 +270,7 @@ void UART_init()
 	UCSR0C &= ~((1<<UMSEL01) | (1<<UMSEL00));			// Asynchronous USART
 	UCSR0C &= ~((1<<UPM01) | (1<<UPM00));				// Parity check disabled
 	UCSR0C &= ~(1<<USBS0);								// 1 stop bit
-	
+
 	UCSR0B &= ~(1<<UCSZ02);								// ...
 	UCSR0C |= ((1<<UCSZ01) | (1<<UCSZ00));				// ... 8 bits character size
 }
@@ -308,7 +308,7 @@ void alarm_start_time_calculation()						// Process the start alarm time based o
 			alrm_start_min[actual_day] = alrm_min[actual_day] - alrm_duration;
 		}
 	}
-	
+
 }
 
 void BT_init()
@@ -317,9 +317,9 @@ void BT_init()
 	cli();												// Global interrupts disable
 	PORTD &= ~(1<<BT_PWR);								// Give power to bluetooth module
 	PORTD |= (1<<AT_MODE);								// Enter configuration (AT) mode
-	
+
 	UART_transmit_String("AT\r\n");						// Send test command to bluetooth module
-	
+
 	if((UART_receive() != 'O') || (UART_receive() != 'K'))// If bluetooth module doesn't answer "OK" then reset bluetooth module
 	{
 		PORTD |= (1<<BT_PWR);							// Cut power to bluetooth module
@@ -328,22 +328,22 @@ void BT_init()
 		PORTD |= (1<<AT_MODE);							// Enter configuration (AT) mode
 	}
 	itoa(BAUDRATE, buffer, 10);							// Convert BAUDRATE value to a string
-	UART_transmit_String("AT+UART=");					// ...	
+	UART_transmit_String("AT+UART=");					// ...
 	UART_transmit_String(buffer);						// ... Set bluetooth module baud rate to 38400 (previously converted from int to string)
 	UART_transmit_String(",1,0\r\n");					// One stop bit, no parity check
-	
+
 	UART_transmit_String("AT+ROLE=0\r\n");				// Set bluetooth module role to slave
-	
+
 	UART_transmit_String("AT+POLAR=0,1\r\n");			// Low drive LED and high drive PAIR_INFO
-	
+
 	UART_transmit_String("AT+NAME=");					// ...
 	UART_transmit_String(PAIR_NAME);					// ... Change the name of the bluetooth module
 	UART_transmit_String("\r\n");						// Send carriage return and new line
-	
+
 	UART_transmit_String("AT+PSWD=");					// ...
 	UART_transmit_String(PAIR_PIN);						// ... Change the bluetooth pairing password
 	UART_transmit_String("\r\n");						// Send carriage return and new line
-	
+
 	_delay_ms(200);										// Wait for bluetooth module to stop communicate
 	PORTD &= ~(1<<AT_MODE);								// Exit configuration (AT) mode
 	PORTD |= (1<<BT_PWR);								// Cut power to bluetooth module
@@ -391,7 +391,7 @@ void update_state_machine()								// State machine
 		break;
 
 		case ALARM :
-		ADCSRA &= ~(1<<ADIE);							// Disable ADC interrupt, therefore stop ADC		
+		ADCSRA &= ~(1<<ADIE);							// Disable ADC interrupt, therefore stop ADC
 		break;
 
 		default : state = INIT;							// In case of a fault, get back to INIT state
@@ -413,7 +413,7 @@ ISR(PCINT2_vect)										// Interrupt on bluetooth pairing status changed
 	if (bit_is_set(PORTD, PAIR_INFO))					// If bluetooth is paired
 	{
 		is_paired = 1;									// Flag set
-	} 
+	}
 	else												// If bluetooth is not paired
 	{
 		is_paired = 0;									// Flag reset
@@ -428,7 +428,7 @@ ISR(TIMER1_OVF_vect)									// Interrupt on PWM timer overflow, each 4.096ms (2
 		tmr1ovf = 0;									// Reset the overflow counter
 		rtc_get_time_24h(&actual_hour, &actual_min, &actual_sec); // Get time from RTC
 		actual_day = rtc_get_day();						// Get day from RTC
-		alarm_start_time_calculation();	
+		alarm_start_time_calculation();
 	}
 	if(!alarm_in_process && (actual_hour == alrm_start_hr[actual_day]) && (actual_min == alrm_start_min[actual_day])) // If alarm time is reached and no alarm is in process
 	{
@@ -444,7 +444,7 @@ ISR(TIMER1_OVF_vect)									// Interrupt on PWM timer overflow, each 4.096ms (2
 			state = STANDBY;							// Turn off lamp, go to standby state
 		}
 		if ((OCR1A + duty_cycle_increments) < 65535)	// Avoid 16bit value overflow
-			OCR1A = OCR1A + duty_cycle_increments;		// Increase duty cycle progressively 
+			OCR1A = OCR1A + duty_cycle_increments;		// Increase duty cycle progressively
 		else OCR1A = 65535;								// Set duty cycle to 100%
 	}
 	else ADCSRA |= (1<<ADSC);							// Start ADC conversion if no alarm is in process
