@@ -1,6 +1,6 @@
 /*
 * rtcDS3231.h
-* 
+*
 * Library for the DS3231 real time clock
 *
 * Created: 10/04/2017 15:15:46
@@ -8,7 +8,7 @@
 *
 * This software is released under the Creative Commons Attribution Share-Alike 4.0 License
 *
-*/ 
+*/
 
 #include <avr/io.h>
 
@@ -23,6 +23,7 @@ void rtc_set_time_12h(uint8_t hour, uint8_t min, uint8_t sec, uint8_t am_pm);
 
 // Date setting function
 void rtc_set_date(uint16_t year, uint8_t month, uint8_t date);
+void rtc_set_day(uint8_t day);
 
 // Time getting functions
 void rtc_get_time_24h(uint8_t *hour, uint8_t *min, uint8_t *sec);
