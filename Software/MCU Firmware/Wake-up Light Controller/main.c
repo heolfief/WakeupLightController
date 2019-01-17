@@ -9,8 +9,12 @@
 * Created: 12/08/2017 15:57:40
 * Author : Heol Fief
 *
-* This hardware and software are released under the Creative Commons Attribution Share-Alike 4.0 License
+* This Software is released under the Creative Commons Attribution Share-Alike 4.0 License
 * https://creativecommons.org/licenses/by-sa/4.0/
+*
+* License does not apply to files under the "IC-master-lib-master" folder therefore all right
+* for this folder and it's files belong to user g4lvanix at https://github.com/g4lvanix/I2C-master-lib
+*
 */
 
 // Hardware related constants//////////////////////////////
@@ -21,7 +25,7 @@
 #define PAIR_BTN		PD3								// ...
 #define PAIR_INFO		PD5								// ...
 #define DEBUG_JUMPER	PD7								// ...
-#define DEBUG_LED		PC1								// ... Define IO
+#define DEBUG_LED		PC1								// ... Define IOs
 
 // Software related constants//////////////////////////////
 #define ALRM_EN			1								// ...
@@ -29,7 +33,8 @@
 #define ALRM_HR			3								// ...
 #define ALRM_MIN		4								// ...
 #define SET_HR			5								// ...
-#define SET_MIN			6								// ... Define bluetooth data IDs
+#define SET_MIN			6								// ...
+#define SET_DAY			7								// ... Define bluetooth data IDs
 #define BAUDRATE		38400							// Baud rate for bluetooth module USART communication
 
 
@@ -39,10 +44,11 @@
 #define OFFTHRESHOLD 2									// Threshold (10 bit value) for potentiometer to be read as 0 (lamp off) to compensate for noise
 
 // Libraries used/////////////////////////////////////////
+#include <stdlib.h>										// Standard C library
 #include <avr/io.h>										// Inputs / Output library
 #include <util/delay.h>									// Delay function library
 #include <avr/interrupt.h>								// Interrupts library
-#include <math.h>										// Library for pow() function
+#include <math.h>										// Library for pow() and round() function
 #include <avr/eeprom.h>									// EEPROM library
 #include "lib/rtcDS3231/rtcDS3231.h"					// Include RTC library
 
@@ -53,6 +59,7 @@ void write_eeprom_settings();
 void PWM_init();
 void PWM_on();
 void PWM_off();
+uint8_t PWM_state();
 void ADC_init();
 void UART_init();
 void UART_transmit(char txdata);
@@ -60,6 +67,7 @@ void UART_transmit_String(char *txdata);
 char UART_receive();
 void alarm_start_time_calculation();
 void BT_init();
+void set_RTC(uint8_t hr,uint8_t min, uint8_t sec, uint8_t year, uint8_t mon, uint8_t date, uint8_t dow);
 void update_state_machine();
 
 // Variables declarations/////////////////////////////////
@@ -88,21 +96,52 @@ uint8_t alarm_in_process = 0;							// Flag set when an alarm is in process
 uint8_t stop_alrm = 0;									// Flag set when pushing stop button
 
 uint8_t tmr1ovf = 0;                                    // Timer 1 overflow counter
-uint8_t duty_cycle_increments;							// Increments used for PWM fade-in during the alarm
+float duty_cycle_increments;							// Increments used for PWM fade-in during the alarm
+float f_duty_cycle=0;									// Duty cycle values in float type to set OCR1A (int type)
 
 // Main programm//////////////////////////////////////////
 int main(void)
 {
+	set_RTC(12,28,50,2017,1,1,1);						// To set RTC for the first time, uncomment this line, change the numbers
+														// according to your time and date, flash, comment and re-flash
+														// (to avoid setting time each time you reset the MCU)
+														// Data is in this format : set_RTC(hour,minutes,seconds,year,month,date,dayofweek)
+
+	uint8_t previous_state=0;
+	uint8_t buff[10];
+	itoa(state, buff,10);								// Convert to ASCII
+	UART_transmit_String(buff);
+
+	alrm_EN[1] = 1;
+	alrm_hr[1] = 12;
+	alrm_min[1] = 30;
+	alrm_duration = 1;
+	write_eeprom_settings();
+
+	itoa(state, buff,10);								// Convert to ASCII
+	UART_transmit_String("State ");						// Transmit string
+	UART_transmit_String(buff);							// Transmit string
+	UART_transmit_String(".\n");						// Transmit string
+
 	while (1)
 	{
-		update_state_machine();
+		previous_state=state;
+		update_state_machine();							// Main state machine
+		//if(previous_state!=state)
+		//{
+			itoa(state, buff,10);						// Convert to ASCII
+			UART_transmit_String("State ");				// Transmit string
+			UART_transmit_String(buff);					// Transmit string
+			UART_transmit_String(".\n");				// Transmit string
+		//}
 	}
 }
 
 // Functions//////////////////////////////////////////////
 void debug()											// Function used to debug hardware
 {
-	uint8_t i;											// Counter
+	uint8_t buff[10];									// Buffer for itoa function
+	uint16_t i;											// Counter
 
 	cli();												// Disable global interrupts
 	PORTC &= ~(1<<DEBUG_LED);							// DEBUG_LED on
@@ -111,46 +150,56 @@ void debug()											// Function used to debug hardware
 	read_eeprom_settings();								// Read previously stored settings
 	UART_transmit_String("Done\nSettings stored :\n");	// Transmit string
 	UART_transmit_String("alrm_EN = ");					// Transmit string
-	for(i=1;i<8,i++)									// For each day of the week
+	for(i=1;i<8;i++)									// For each day of the week
 	{
-		UART_transmit_(alrm_EN[i-1]);					// Transmit string
+		UART_transmit(alrm_EN[i-1]);					// Transmit string
 		UART_transmit_String(", ");						// Transmit string
 	}
 	UART_transmit_String("\nalrm_hr = ");				// Transmit string
-	for(i=1;i<8,i++)									// For each day of the week
+	for(i=1;i<8;i++)									// For each day of the week
 	{
-		UART_transmit_(alrm_hr[i-1]);					// Transmit string
+		UART_transmit(alrm_hr[i-1]);					// Transmit string
 		UART_transmit_String(", ");						// Transmit string
 	}
 	UART_transmit_String("\nalrm_min = ");				// Transmit string
-	for(i=1;i<8,i++)									// For each day of the week
+	for(i=1;i<8;i++)									// For each day of the week
 	{
-		UART_transmit_(alrm_min[i-1]);					// Transmit string
+		UART_transmit(alrm_min[i-1]);					// Transmit string
 		UART_transmit_String(", ");						// Transmit string
 	}
 	UART_transmit_String("\nalrm_duration = ");			// Transmit string
-	UART_transmit_(alrm_duration);						// Transmit string
+	UART_transmit(alrm_duration);						// Transmit string
 	UART_transmit_String(".\n");						// Transmit string
 
 	UART_transmit_String("Getting data from RTC...\n");	// Transmit string
 	rtc_get_time_24h(&actual_hour, &actual_min, &actual_sec); // Get time from RTC
 	actual_day = rtc_get_day();							// Get day from RTC
 	UART_transmit_String("Done\nTime : ");				// Transmit string
-	UART_transmit(actual_hour);							// Transmit string
+	itoa(actual_hour, buff,10);							// Convert to ASCII
+	UART_transmit_String(buff);							// Transmit string
 	UART_transmit_String("hr, ");						// Transmit string
-	UART_transmit(actual_min);							// Transmit string
+	itoa(actual_min, buff,10);							// Convert to ASCII
+	UART_transmit_String(buff);							// Transmit string
 	UART_transmit_String("min, ");						// Transmit string
-	UART_transmit(actual_sec);							// Transmit string
+	itoa(actual_sec, buff,10);							// Convert to ASCII
+	UART_transmit_String(buff);							// Transmit string
 	UART_transmit_String("sec.\nDay of the week : ");	// Transmit string
-	UART_transmit(actual_day);							// Transmit string
+	itoa(actual_day, buff,10);							// Convert to ASCII
+	UART_transmit_String(buff);							// Transmit string
+	UART_transmit_String(".\n");						// Transmit string
+	UART_transmit_String("ADC value : ");	// Transmit string
+	ADCSRA |= (1<<ADSC);								// Start ADC conversion
+	while(ADCSRA & (1<<ADSC));							// Wait for conversion to complete
+	itoa(ADC, buff,10);									// Convert to ASCII
+	UART_transmit_String(buff);							// Transmit string
 	UART_transmit_String(".\n");						// Transmit string
 	UART_transmit_String("Testing PWM, it should take around 3.3s to fade-in.\n");// Transmit string
 	PWM_on();											// Turn on PWM module
 	OCR1A = 0;											// Reinitialize duty cycle
-	for(i=0;i<65536;i++)								// For all duty cycle values
+	for(i=0;i<65535;i++)								// For all duty cycle values
 	{
 		OCR1A++;										// Increase duty cycle
-		delay_us(50);									// Wait 50µs
+		_delay_us(50);									// Wait 50µs
 	}
 	UART_transmit_String("Done\n");						// Transmit string
 	PWM_off();											// Turn off PWM module
@@ -162,10 +211,10 @@ void debug()											// Function used to debug hardware
 void IO_init()
 {
 	DDRC |= (1<<DEBUG_LED);								// DEBUG_LED as output
-	DDRD &= ~(1<<PAIR_INFO);							// PAIR_INFO as input
+	DDRD &= ~((1<<PAIR_INFO) | (1<<ALRM_BTN));			// PAIR_INFO and ALRM_BTN as inputs
 	DDRD |= (1<<BT_PWR) | (1<<AT_MODE);					// BT_PWR and AT_MODE as outputs
 	DDRD &= ~((1<<ALRM_BTN) | (1<<PAIR_BTN) | (1<<DEBUG_JUMPER));// Alarm and pair buttons as inputs, debug jumper as input
-
+	DDRB |= (1<<PB1);									// PB1 (OSC1A) as output
 	PORTC |= (1<<DEBUG_LED);							// DEBUG_LED off
 	PORTD |= (1<<BT_PWR);								// High level (BT module off)
 	PORTD &= ~(1<<AT_MODE);								// Low level
@@ -219,8 +268,6 @@ void PWM_init()
 	TCCR1B |= (1<<CS10);								// ...
 	TCCR1B &= ~((1<<CS12) | (1<<CS11));					// No prescaler
 
-	TIMSK1 |= (1<<TOIE1);								// Enable interrupt on timer 1 overflow
-
 	ICR1 = 0xFFFF;										// TOP set to max value -> 244Hz
 
 	OCR1A = 0;											// Duty cycle to 0% (as default)
@@ -248,6 +295,12 @@ void PWM_off()
 {
 	TCCR1A &= ~(1<<COM1A1);								// ...
 	TCCR1A &= ~(1<<COM1A0);								// ... Normal mode, OC1A disconnected
+}
+
+uint8_t PWM_state()
+{
+	if(TCCR1A & (1<<COM1A1)) return 1;					// If PWM is on, retun 1
+	else return 0;
 }
 
 void ADC_init()
@@ -294,20 +347,20 @@ char UART_receive()
 void alarm_start_time_calculation()						// Process the start alarm time based on fading alarm duration
 {
 	uint8_t days_of_week;
-	for (days_of_week=0;days_of_week<7;days_of_week++)
+
+	for (days_of_week=0;days_of_week<7;days_of_week++)	// For each days of the week
 	{
-		if (alrm_min[actual_day] < alrm_duration)
+		if (alrm_min[actual_day] < alrm_duration)		// If set minutes < alarm duration
 		{
-			alrm_start_hr[actual_day] = alrm_hr[actual_day] - 1;		// Recalculate the hour
+			alrm_start_hr[actual_day] = alrm_hr[actual_day] - 1; // Recalculate the hour
 			alrm_start_min[actual_day] = 60 - (alrm_duration - alrm_min[actual_day]); // Recalculate the minutes
 		}
 		else
 		{
-			alrm_start_hr[actual_day] = alrm_hr[actual_day];
-			alrm_start_min[actual_day] = alrm_min[actual_day] - alrm_duration;
+			alrm_start_hr[actual_day] = alrm_hr[actual_day]; // Don't recalculate the hour
+			alrm_start_min[actual_day] = alrm_min[actual_day] - alrm_duration; // Don't recalculate the minutes
 		}
 	}
-
 }
 
 void BT_init()
@@ -349,8 +402,19 @@ void BT_init()
 	sei();												// Global interrupts enable
 }
 
+void set_RTC(uint8_t hr,uint8_t min, uint8_t sec, uint8_t year, uint8_t mon, uint8_t date, uint8_t dow)
+{
+	IO_init();											// Initialize IOs
+	i2c_init();											// Initialize I2C communication
+
+	rtc_set_time_24h(hr,min,sec);						// Set time to RTC
+	rtc_set_date(year,mon,date);						// Set date to RTC
+	rtc_set_day(dow);									// Set day of the week to RTC
+}
+
 void update_state_machine()								// State machine
 {
+	uint8_t buff[10];
 	switch (state)
 	{
 		case INIT :
@@ -359,38 +423,45 @@ void update_state_machine()								// State machine
 		PWM_init();										// Initialize PWM peripheral
 		ADC_init();										// Initialize ADC peripheral
 		UART_init();									// Initialize UART peripheral
-		BT_init();										// Initialize bluetooth module
-		if(bit_is_set(PORTD, DEBUG_JUMPER) debug();		// If jumper is removed, go to debug mode
+		//BT_init();										// Initialize bluetooth module
+		i2c_init();										// Initialize I2C communication
+
+		rtc_get_time_24h(&actual_hour, &actual_min, &actual_sec); // Get time from RTC
+		actual_day = rtc_get_day();						// Get day from RTC Monday is 0 (RTC return 1 for Monday)
+		alarm_start_time_calculation();					// Calculate start time of alarm based on alarm duration
+		TIMSK1 |= (1<<TOIE1);							// Enable interrupt on timer 1 overflow
+
+		if(bit_is_set(PIND, DEBUG_JUMPER))debug();		// If jumper is removed, go to debug mode
 		sei();											// Global interrupts enable
 		state = STANDBY;								// After initialization done, got to standby state
 		break;
 
 		case STANDBY :
-		PWM_off();										// Turn off PWM output
-		if(slider > OFFTHRESHOLD) state = LAMP;			// If slider isn't on 0, turn on the Lamp
+		if(PWM_state()==1) PWM_off();					// Turn off PWM output if it is not already turned off
+		if(slider >= OFFTHRESHOLD) state = LAMP;		// If slider isn't on 0, turn on the Lamp
 		if(pair_request_flag) state = BLUETOOTH;		// If pair button is pressed, go to bluetooth state
-		if(alarm_in_process) state = ALARM;				// If an alarm is reached go to alarm state
 		break;
 
 		case LAMP :
-		PWM_on();										// Turn on PWM output
+		if(PWM_state()==0) PWM_on();					// Turn on PWM output if it is not already turned on
 		if(slider < OFFTHRESHOLD) state = STANDBY;		// If slider is on 0, turn off the Lamp
 		if(pair_request_flag) state = BLUETOOTH;		// If pair button is pressed, got to bluetooth state
 		break;
 
 		case BLUETOOTH :
-		PORTD &= ~(1<<BT_PWR);							// Give power to bluetooth module
+		/*PORTD &= ~(1<<BT_PWR);							// Give power to bluetooth module
 		sei();											// Enable global interrupts
 		UCSR0B |= ((1<<RXCIE0) | (1<<TXCIE0));			// Enable RX and TX interrupts
-		while (is_paired);								// Wait for bluetooth communication complete
+		while (is_paired);								// Wait for bluetooth communication complete					// TO IMPROVE
 		UCSR0B &= ~((1<<RXCIE0) | (1<<TXCIE0));			// Disable RX and TX interrupts
 		pair_request_flag = 0;							// Pairing complete
-		PORTD |= (1<<BT_PWR);							// Cut power to bluetooth module
+		PORTD |= (1<<BT_PWR);							// Cut power to bluetooth module*/
 		state = STANDBY;								// Go to standby state
 		break;
 
 		case ALARM :
-		ADCSRA &= ~(1<<ADIE);							// Disable ADC interrupt, therefore stop ADC
+		if(PWM_state()==0) PWM_on();					// Turn on PWM output if it is not already turned on
+		if(ADCSRA & (1<<ADIE)) ADCSRA &= ~(1<<ADIE);	// Disable ADC interrupt (if not already done), therefore stop ADC
 		break;
 
 		default : state = INIT;							// In case of a fault, get back to INIT state
@@ -421,29 +492,36 @@ ISR(PCINT2_vect)										// Interrupt on bluetooth pairing status changed
 
 ISR(TIMER1_OVF_vect)									// Interrupt on PWM timer overflow, each 4.096ms (244Hz)
 {
+	uint8_t buff[20];
 	tmr1ovf ++;											// Overflow counter
 	if(tmr1ovf == 122)									// Each 0.5sec (122*4.096ms = 0.5s)
 	{
 		tmr1ovf = 0;									// Reset the overflow counter
 		rtc_get_time_24h(&actual_hour, &actual_min, &actual_sec); // Get time from RTC
-		actual_day = rtc_get_day();						// Get day from RTC
-		alarm_start_time_calculation();
+		actual_day = rtc_get_day();						// Get day from RTC Monday is 0 (RTC return 1 for Monday)
+		alarm_start_time_calculation();					// Calculate start time of alarm based on alarm duration
 	}
-	if(!alarm_in_process && (actual_hour == alrm_start_hr[actual_day]) && (actual_min == alrm_start_min[actual_day])) // If alarm time is reached and no alarm is in process
+	if((alarm_in_process == 0) && (actual_hour == alrm_start_hr[actual_day]) && (actual_min == alrm_start_min[actual_day]) && (alrm_EN[actual_day] == 1) && (bit_is_set(PIND, ALRM_BTN)) && (actual_sec == 0))
+	// If alarm time is reached and no alarm is in process and alarm is enabled by software and hardware
 	{
 		alarm_in_process = 1;							// Set the flag
-		OCR1A = 0;										// Start PWM fade with a duty cycle of 0%
-		duty_cycle_increments = (float)alrm_duration*60/65536/0.004096; // Calculate OCR1A increments based on alrm_duration
+		f_duty_cycle = 0;								// ...
+		OCR1A = 0;										// ... Start PWM fade with a duty cycle of 0%
+		duty_cycle_increments = 65536/((alrm_duration*60)/0.004096); // Calculate OCR1A increments based on alrm_duration
+		state = ALARM;									// Go to alarm state
 	}
 	if (alarm_in_process)								// If alarm is in process
 	{
 		if (stop_alrm)									// If Pair/stop button is pressed
 		{
 			alarm_in_process = 0;						// Stop the alarm
+			stop_alrm=0;								// Reset flag
 			state = STANDBY;							// Turn off lamp, go to standby state
 		}
-		if ((OCR1A + duty_cycle_increments) < 65535)	// Avoid 16bit value overflow
-			OCR1A = OCR1A + duty_cycle_increments;		// Increase duty cycle progressively
+		if(OCR1A!=65535)f_duty_cycle += duty_cycle_increments; // Increase duty cycle in a float format if it isn't already at maximum
+		if((pow(2,f_duty_cycle/4096)-1) < 65535) 		// Avoid 16bit value overflow
+			OCR1A = pow(2,f_duty_cycle/4096)-1;			// Converts linear response to "anti-log" (to compensate for eye brightness perception)
+														// And Set PWM duty cycle
 		else OCR1A = 65535;								// Set duty cycle to 100%
 	}
 	else ADCSRA |= (1<<ADSC);							// Start ADC conversion if no alarm is in process
@@ -472,17 +550,19 @@ ISR(USART_RX_vect)										// Interrupt on UART reception complete
 	}
 	switch(id)
 	{
-		case ALRM_EN : alrm_EN[day] = (data & 0x01);		// Assign alarm enable data to alrm_EN array
+		case ALRM_EN : alrm_EN[day] = (data & 0x01);	// Assign alarm enable data to alrm_EN array
 		break;
-		case ALRM_DUR : alrm_duration = data;				// Assign data to alarm duration variable
+		case ALRM_DUR : alrm_duration = data;			// Assign data to alarm duration variable
 		break;
-		case ALRM_HR : alrm_hr[day] = data;					// Assign data to alarm hour array
+		case ALRM_HR : alrm_hr[day] = data;				// Assign data to alarm hour array
 		break;
-		case ALRM_MIN : alrm_min[day] = data;				// Assign data to alarm min array
+		case ALRM_MIN : alrm_min[day] = data;			// Assign data to alarm min array
 		break;
 		case SET_HR : rtc_set_time_24h(data, actual_min, actual_sec); // Set hour
 		break;
 		case SET_MIN : rtc_set_time_24h(actual_hour, data, actual_sec);	// Set minute
+		break;
+		case SET_DAY : rtc_set_day(data);				// Set day of the week
 		break;
 	}
 	write_eeprom_settings();							// Write settings to EEPROM
