@@ -1,5 +1,5 @@
 # WakeupLightController
-**[THIS IS A WORK IN PROGRESS]**
+**[THIS IS AN ABORTED WORK (lack of time to finish it)]**
 
 This is a credit-card sized board designed to control LEDs (for example LED strip) as a wake-up light.
 
