@@ -1,0 +1,182 @@
+format_version: '2'
+name: LightControllerPWM
+versions:
+  api: '1.0'
+  backend: 1.7.301
+  commit: 1e07622763d149970fd8808a8f12ff3b1e84e0d7
+  content: unknown
+  content_pack_name: unknown
+  format: '2'
+  frontend: 1.7.301
+  packs_version_avr8: 1.0.1408
+  packs_version_qtouch: unknown
+  packs_version_sam: 1.0.1373
+  version_backend: 1.7.301
+  version_frontend: ''
+board:
+  identifier: CustomBoard
+  device: ATmega328P-AN
+details: null
+application: null
+middlewares: {}
+drivers:
+  CPU:
+    user_label: CPU
+    definition: 'Atmel:ATMega48_88_168_328_drivers:1.0.0::ATmega328P-AN::CPU::driver_config_definition::SYSCTRL::Drivers:SYSCTRL:'
+    functionality: System
+    api: 'Drivers:SYSCTRL:'
+    configuration:
+      async_input_speed: 32768
+      clkadc_oscillator: Input clock
+      clkasy_oscillator: Async input clock
+      clkcpu_oscillator: Input clock
+      clkio_oscillator: Input clock
+      clkptc_oscillator: Input clock
+      cpu_clock_source: CLKcpu
+      cpu_sreg_i: true
+      enable_async_input: true
+      enable_clkadc: true
+      enable_clkasy: false
+      enable_clkcpu: true
+      enable_clkio: true
+      enable_clkptc: false
+      enable_core_clock: true
+      enable_input: true
+      input_speed: 16000000
+      pm_ivsel: Interrupt vector placed at the beginning of main FLASH memory
+      pm_pud: true
+      pm_se: true
+      pm_sm: Power Save
+      prescaler_divider: '1'
+    optional_signals: []
+    variant: null
+    clocks:
+      domain_group:
+        nodes:
+        - name: Core
+          input: Core
+          external: false
+          external_frequency: 0
+        configuration: {}
+  ADC_0:
+    user_label: ADC_0
+    definition: Atmel:ATMega48_88_168_328_drivers:1.0.0::ATmega328P-AN::ADC::driver_config_definition::ADC.Basic::Drivers:ADC:Basic
+    functionality: ADC
+    api: Drivers:ADC:Basic
+    configuration:
+      adcsra_adate: false
+      adcsra_aden: true
+      adcsra_adie: false
+      adcsra_adps: '128'
+      adcsrb_acme: false
+      adcsrb_adts: Free Running mode
+      admux_adlar: false
+      admux_mux: ADC Single Ended Input pin 2
+      admux_refs: AVCC with external capacitor at AREF pin
+    optional_signals:
+    - identifier: ADC_0:ADC/2
+      pad: PC2
+      mode: Enabled
+      configuration: null
+      definition: Atmel:ATMega48_88_168_328_drivers:1.0.0::ATmega328P-AN::optional_signal_definition::ADC.ADC.2
+      name: ADC/ADC/2
+      label: ADC/2
+    variant: null
+    clocks:
+      domain_group:
+        nodes:
+        - name: ADC
+          input: CLKadc
+          external: false
+          external_frequency: 0
+        configuration:
+          adc_clock_source: CLKadc
+  TIMER_0:
+    user_label: TIMER_0
+    definition: Atmel:ATMega48_88_168_328_drivers:1.0.0::ATmega328P-AN::TC2::driver_config_definition::TC8.Mode.0.Normal::Drivers:TC8:Init
+    functionality: Timer
+    api: Drivers:TC8:Init
+    configuration:
+      inc_isr_harness: true
+      tc8_async_exclk: false
+      tc8_coma: Normal port operation, OCA disconnected
+      tc8_comb: Normal port operation, OCB disconnected
+      tc8_cs: IO clock divided by 1024
+      tc8_ociea: false
+      tc8_ocieb: false
+      tc8_ocra: 0
+      tc8_ocrb: 0
+      tc8_psrasy: false
+      tc8_psrsync: false
+      tc8_toie: true
+      tc8_tsm: false
+    optional_signals: []
+    variant: null
+    clocks:
+      domain_group:
+        nodes:
+        - name: TC2
+          input: CLKio
+          external: false
+          external_frequency: 0
+        configuration:
+          tc2_clock_source: CLKio
+  PWM_0:
+    user_label: PWM_0
+    definition: Atmel:ATMega48_88_168_328_drivers:1.0.0::ATmega328P-AN::TC1::driver_config_definition::TC16.Mode.14.Fast.PWM::Drivers:PWM:Basic
+    functionality: PWM
+    api: Drivers:PWM:Basic
+    configuration:
+      callback_rate: 0
+      inc_overflow_irq: false
+      tc16_coma: Clear OCA on Compare Match, set OCA on BOTTOM (non-inverting mode)
+      tc16_comb: Normal port operation, OCB disconnected
+      tc16_cs: No prescaling
+      tc16_ices: Falling edge will trigger input capture
+      tc16_icie: false
+      tc16_icnc: false
+      tc16_icr: 65535
+      tc16_ociea: false
+      tc16_ocieb: false
+      tc16_orca: 0
+      tc16_orcb: 0
+      tc16_toie: false
+    optional_signals:
+    - identifier: PWM_0:OCA
+      pad: PB1
+      mode: Enabled
+      configuration: null
+      definition: Atmel:ATMega48_88_168_328_drivers:1.0.0::ATmega328P-AN::optional_signal_definition::TC1.OCA
+      name: TC1/OCA
+      label: OCA
+    variant: null
+    clocks:
+      domain_group:
+        nodes:
+        - name: TC16
+          input: CLKio
+          external: false
+          external_frequency: 0
+        configuration:
+          tc16_clock_source: CLKio
+pads:
+  PWM_OUT:
+    name: PB1
+    definition: Atmel:ATMega48_88_168_328_drivers:1.0.0::ATmega328P-AN::pad::PB1
+    mode: Digital output
+    user_label: PWM_OUT
+    configuration: null
+  ADC_IN:
+    name: PC2
+    definition: Atmel:ATMega48_88_168_328_drivers:1.0.0::ATmega328P-AN::pad::PC2
+    mode: Analog
+    user_label: ADC_IN
+    configuration: null
+toolchain_options:
+- definition:
+    identifier: Atmel:ATMega48_88_168_328_drivers:1.0.0::ATmega328P-AN::environment_definition::All:Atmel.Studio:7.0.0
+  configuration:
+    compiler_config:
+      avrgcc_compiler_miscellaneous_OtherFlags: -std=gnu99
+    linker_config:
+      avrgcc_linker_miscellaneous_LinkerFlags: ''
