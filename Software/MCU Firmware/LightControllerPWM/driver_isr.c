@@ -53,7 +53,7 @@ ISR(TIMER2_OVF_vect)
 	if (adc_res > ADC_DEADZONE)
 	{
 		PWM_0_enable();
-		PWM_0_load_duty_cycle_ch0(pow(2, ((double)(adc_res + 1.0) / 64.0)) - 1); // Converts linear response to "anti-log" (to compensate for eye brightness perception), and Set PWM duty cycle to converted ADC value
+		PWM_0_load_duty_cycle_ch0(exp((double)adc_res / 92.25) - 1); // Converts linear response to "anti-log" (to compensate for eye brightness perception), and Set PWM duty cycle to converted ADC value
 		sleep_set_mode(SLEEP_MODE_IDLE);	// Sleep mode allowing Tim1 clk so that PWM continues to work
 	} else {
 		PWM_0_disable();
